@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "envir.html",
+    "href": "envir.html",
+    "title": "2  Environment",
+    "section": "",
+    "text": "In this section we will prepare the environment for further analysis. Concourse parameters: width(x) = 53, height(y) = 50;"
+  },
+  {
+    "objectID": "envir.html#global",
+    "href": "envir.html#global",
+    "title": "2  Environment",
+    "section": "2.1 Global",
+    "text": "2.1 Global\n\n# First let's define an area in metres\ngcs_env_m = function(){\n  plot((-250 /14):(900/14), (-250/14):(900/14), col = \"white\", xlab = \"X\", ylab = \"Y\") # draw an empty plot\n  polygon(x = c(0, 0, 740/14, 740/14),\n          y = c(0, 700/14, 700/14, 0),\n          border = \"blue\",\n          lwd = 2) # draw walls of a GCS\n  polygon(x= c(-150/14, 0, 0, -150/14),\n          y = c(400/14, 400/14, 150/14, 150/14),\n          border = \"blue\",\n          lwd = 2) # exit 0\n  polygon(x = c(0, 250/14, 250/14, 0),\n          y = c(850/14, 850/14, 700/14, 700/14),\n          border = \"red\",\n          lwd = 2) # exit 1\n  polygon(x = c(455/14, 700/14, 700/14, 455/14),\n          y = c(850/14, 850/14, 700/14, 700/14),\n          border = \"red\",\n          lwd = 2) # exit 2\n  polygon(x = c(740/14, 860/14, 860/14, 740/14),\n          y = c(700/14, 700/14, 610/14, 610/14),\n          border = \"red\",\n          lwd = 2) # exit 3\n  polygon(x = c(740/14, 860/14, 860/14, 740/14),\n          y = c(550/14, 550/14, 400/14, 400/14),\n          border = \"red\",\n          lwd = 2) # exit 4\n  polygon(x = c(740/14, 860/14, 860/14, 740/14),\n          y = c(340/14, 340/14, 190/14, 190/14),\n          border = \"red\",\n          lwd = 2) # exit 5\n  polygon(x = c(740/14, 860/14, 860/14, 740/14),\n          y = c(130/14, 130/14, 0, 0),\n          border = \"red\",\n          lwd = 2) # exit 6\n  polygon(x = c(555/14, 740/14, 740/14, 555/14),\n          y = c(0, 0, -70/14, -70/14),\n          border = \"red\",\n          lwd = 2) # exit 7\n  polygon(x = c(370/14, 555/14, 556/14, 370/14),\n          y = c(0, 0, -70/14, -70/14),\n          border = \"red\",\n          lwd = 2) # exit 8\n  polygon(x = c(185/14, 370/14, 370/14, 185/14),\n          y = c(0, 0, -70/14, -70/14),\n          border = \"red\",\n          lwd = 2) # exit 9\n  polygon(x = c(0, 185/14, 185/14, 0),\n          y = c(0, 0, -70/14, -70/14),\n          border = \"red\",\n          lwd = 2) # exit 10\n  # polygon(x = c(294, 252, 210, 210, 252, 294, 336, 336, 294),\n  #         y = c(294, 294, 336, 378, 420, 420, 378, 336, 294),\n  #         col = \"red\") # information booth (an obstacle)\n  plotrix::draw.circle(x = 371/14, y = 280/14, \n                       radius = 56/14, \n                       col = \"red\") # obstacle \n  # annotation of a plot\n  text(x = -84/14,\n       y = 252/14,\n       label = \"Exit 0\",\n       srt = 90)\n  text(x = 112/14,\n       y = 770/14,\n       label = \"Exit 1\")\n  text(x = 560/14,\n       y = 770/14,\n       label = \"Exit 2\")\n  text(x = 784/14,\n       y = 630/14,\n       label = \"Exit 3\",\n       srt = -90)\n  text(x = 784/14,\n       y = 455/14,\n       label = \"Exit 4\",\n       srt = -90)\n  text(x = 784/14,\n       y = 252/14,\n       label = \"Exit 5\",\n       srt = -90)\n  text(x = 784/14, \n       y = 42/14,\n       label = \"Exit 6\",\n       srt = -90)\n  text(x = 630/14,\n       y = -49/14,\n       label = \"Exit 7\")\n  text(x = 448/14,\n       y = -49/14,\n       label = \"Exit 8\")\n  text(x = 266/14, \n       y = -49/14,\n       label = \"Exit 9\")\n  text(x = 63/14,\n       y = -49/14,\n       label = \"Exit 10\")\n}\ngcs_env_m()\n\n\n# now, let's convert the env into an sf object\nmatrix_walls = matrix(c(0,0,0,50,53,50, 53,0,0,0),\n                      ncol = 2,\n                      byrow = TRUE)\nmatrixlist_walls = list(matrix_walls)\npolygon_walls = sf::st_polygon(matrixlist_walls)\n\n# calculate area size (will be needed for measuring density)\ngcs_area = polygon_walls |> sf::st_area()"
+  },
+  {
+    "objectID": "envir.html#divided",
+    "href": "envir.html#divided",
+    "title": "2  Environment",
+    "section": "2.2 Divided",
+    "text": "2.2 Divided\n\n# divide gcs polygon by creating a grid\ngcs_div = sf::st_make_grid(polygon_walls, \n                           n = 2,\n                           what = \"polygons\")\n\n# convert gcs_div to an sf object\ngcs_div_sf = gcs_div |> \n  sf::st_as_sf() |> \n  dplyr::rename(geom = x)\n\n# find out the area size of each polygon\ngcs_area_div = list()\nfor (i in 1:lengths(gcs_div_sf)){\n  gcs_area_div[[i]] = sf::st_area(gcs_div_sf[[i]]) \n  # print(gcs_area_div)\n}\n# make it a vector\ngcs_area_div = gcs_area_div |>\n  unlist() |>\n  as.vector()"
+  },
+  {
+    "objectID": "envir.html#selected",
+    "href": "envir.html#selected",
+    "title": "2  Environment",
+    "section": "2.3 Selected",
+    "text": "2.3 Selected\nTwo areas have been selected based on the results of the previous work: https://github.com/Urban-Analytics/uncertainty/blob/master/gcs/process.ipynb Hence, it’s zone 1 (exit 0) and zone 2 (around exit 5) One cell is 2x2, each zone is 5 (width) and 6 (length) cells, thus 10 and 12 metres accordingly\nZone 1 is next to exit 0, thus its length has been left equal to the length of the gates. The width has been approximated to 10 metres (1 pixel = 2 metres).\nZone 2 is on the opposite side to Zone 1 and is 1 pixel below comapred to Zone 1, thus around exit 5.\n\n## zone 1 (it's next to exit 0)\ngcs_env_m()\npolygon(x = c(10, 0, 0, 10),\n        y = c(28, 28, 10, 10),\n        border = \"blue\",\n        lwd = 2)\n\n## zone 2\n# gcs_env_m()\npolygon(x = c(53, 43, 43, 53),\n        y = c(26, 26, 8, 8),\n        border = \"blue\",\n        lwd = 2)\n\n# zone 1 sf polygon\nzone1_matrix = matrix(c(10, 28, 0, 28, 0, 10, 10, 10, 10, 28),\n                      ncol = 2,\n                      byrow = T)\nzone1_matrix_list = list(zone1_matrix)\nzone1 = sf::st_polygon(zone1_matrix_list)\n\n# zone 2 sf polygon\nzone2_matrix = matrix(c(53, 26, 43, 26, 43, 8, 53, 8, 53, 26),\n                      ncol = 2,\n                      byrow = T)\nzone2_matrix_list = list(zone2_matrix)\nzone2 = sf::st_polygon(zone2_matrix_list)\n\n# checking where selected areas are\ngcs_env_m()\nzone1 |> plot(add = T, border = \"green\", lwd = 2)\nzone2 |> plot(add = T, border = \"green\", lwd = 2)\n\n# join both zones\nzones = list(zone1, zone2)"
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "3  Summary",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Getting data",
+    "section": "",
+    "text": "# let's convert jps and gcs dataframes to sf objects, so we can perform spatial operations\n\ntraj1_sf = traj1 |> \n  sf::st_as_sf(coords = c(\"X\", \"Y\")) |> \n  dplyr::select(-c(3,4,5,6,7)) # drop columns we won't need\n\ngcs_sf = gcs |> \n  sf::st_as_sf(coords = c(\"x_coord\", \"y_coord\")) |> \n  dplyr::mutate(geometry = geometry/14) # convert from pixels to metres"
+  }
+]
