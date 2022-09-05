@@ -1,0 +1,26 @@
+# Getting data
+
+```{r}
+# trajectory data
+traj1 = read.table("/Users/gretatimaite/Desktop/pedestrian_simulation/final_results/8_frame/1/traj.txt",
+                   col.names = c("ID",	"FR",	"X",	"Y",	"Z",	"A",	"B",	"ANGLE",	"COLOR"))
+
+traj1 |> dplyr::glimpse()
+
+# clean GCS data
+
+gcs = sf::read_sf("https://github.com/GretaTimaite/pedestrian_simulation/releases/download/data/frames_final.csv")
+```
+
+```{r}
+# let's convert jps and gcs dataframes to sf objects, so we can perform spatial operations
+
+traj1_sf = traj1 |> 
+  sf::st_as_sf(coords = c("X", "Y")) |> 
+  dplyr::select(-c(3,4,5,6,7)) # drop columns we won't need
+
+gcs_sf = gcs |> 
+  sf::st_as_sf(coords = c("x_coord", "y_coord")) |> 
+  dplyr::mutate(geometry = geometry/14) # convert from pixels to metres
+
+```
