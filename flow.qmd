@@ -1,6 +1,6 @@
 # Flow 
 
-## 1. Global flow (GCS)
+## 1.1 Global flow (GCS)
 
 ```{r, eval = F}
 # now let's create a new column for seconds
@@ -25,7 +25,6 @@ gcs_flow_plot = ggplot2::ggplot(gcs_grouped) +
   ggplot2::aes(x = sec,
                y = n) +
   ggplot2::geom_line()
-gcs_flow_plot 
 ```
 
 
@@ -54,7 +53,7 @@ ggplot2::ggplot(gcs_grouped) +
 ```
 
 
-## 2. Divided flow  (GCS)
+## 2.1 Divided flow  (GCS)
 
 ```{r, eval=FALSE}
 # first create a list to store our multiple dataframes
@@ -108,7 +107,7 @@ for (i in 1:length(gcs_joined_grouped)){
 gridExtra::grid.arrange(gcs_flow_div_plots[[1]], gcs_flow_div_plots[[2]],gcs_flow_div_plots[[3]],gcs_flow_div_plots[[4]], layout_matrix = rbind(c(1,2),c(3,4)))
 ```
 
-## 3. Selected  (GCS)
+## 3.1 Selected  (GCS)
 
 ```{r, eval=FALSE}
 # a list to store our 2 dataframes for the selected areas
@@ -184,7 +183,7 @@ jps_flow_plot = ggplot2::ggplot(jps_grouped) +
 jps_flow_plot 
 ```
 
-## 2. Divided flow  (JPS)
+## 2.2 Divided flow  (JPS)
 
 ```{r, eval=FALSE}
 # first create a list to store our multiple dataframes
@@ -235,7 +234,7 @@ for (i in 1:length(jps_joined_grouped)){
 gridExtra::grid.arrange(jps_flow_div_plots[[1]], jps_flow_div_plots[[2]],jps_flow_div_plots[[3]],jps_flow_div_plots[[4]], layout_matrix = rbind(c(1,2),c(3,4)))
 ```
 
-## 3. Selected  (JPS)
+## 3.2 Selected  (JPS)
 
 ```{r, eval=FALSE}
 # a list to store our 2 dataframes for the selected areas
@@ -290,11 +289,13 @@ In this subsection we will overlay GCS and JPS plots to compare flows.
 ### Global
 
 ```{r, eval = F}
-flow_comp = gcs_flow_plot + 
-  # ggplot2::ggplot(jps_grouped) +
+flow_comp = ggplot2::ggplot(gcs_grouped) +
+  ggplot2::aes(x = sec,
+               y = n) +
+  ggplot2::geom_line() + 
   ggplot2::geom_line(data = jps_grouped,
                      color = "red")
-
+flow_comp
 ```
 
 ### Divided
@@ -310,7 +311,7 @@ for (i in 1:length(gcs_flow_div_plots)) {
 gridExtra::grid.arrange(flow_div_comp[[1]], flow_div_comp[[2]],flow_div_comp[[3]],flow_div_comp[[4]], layout_matrix = rbind(c(1,2),c(3,4)))
 ```
 
-## Selected
+### Selected
 
 ```{r, eval = F}
 flow_sel_comp = list()
