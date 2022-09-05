@@ -47,7 +47,7 @@ ggplot2::ggplot(gcs_d)+
                      col = "red")
 ```
 
-## Divided GCS density
+## 1.2 Divided GCS density
 
 ```{r, eval = F}
 # add area as a new column
@@ -112,3 +112,54 @@ for (i in 1:length(gcs_d_sel)){
 # let's plot a polygons 1-4 and 5-8
 gridExtra::grid.arrange(gcs_den_sel_plots[[1]], gcs_den_sel_plots[[2]], layout_matrix = rbind(c(1,2)))
 ```
+
+## Comparison
+
+### Global
+
+```{r, eval = F}
+density_comp = gcs_density + 
+  # ggplot2::ggplot(jps_grouped) +
+  ggplot2::geom_line(data = jps_d,
+                     color = "red")
+```
+
+![](figures/density_comp.png)
+
+
+### Divided
+
+```{r, eval = F}
+density_div_comp = list()
+for (i in 1:length(gcs_den_div_plots)) {
+  density_div_comp[[i]] = gcs_den_div_plots[[i]] + 
+  ggplot2::geom_line(data = jps_d_div[[i]],
+                     color = "red")
+}
+
+gridExtra::grid.arrange(density_div_comp[[1]], density_div_comp[[2]], density_div_comp[[3]], density_div_comp[[4]], layout_matrix = rbind(c(1,2),c(3,4)))
+```
+
+![](figures/density_div_comp_plot.png)
+
+## Selected
+
+```{r, eval = F}
+flow_sel_comp = list()
+for (i in 1:length(gcs_flow_zones_plots)) {
+  flow_sel_comp[[i]] = gcs_flow_zones_plots[[i]] + 
+  ggplot2::geom_line(data = jps_joined_grouped_zones[[i]],
+                     color = "red")
+}
+
+gridExtra::grid.arrange(flow_sel_comp[[1]], flow_sel_comp[[2]], layout_matrix = rbind(c(1,2)))
+
+```
+
+![](figures/density_sel_comp_plot.png)
+
+
+
+
+
+
