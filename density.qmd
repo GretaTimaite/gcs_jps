@@ -113,6 +113,99 @@ for (i in 1:length(gcs_d_sel)){
 gridExtra::grid.arrange(gcs_den_sel_plots[[1]], gcs_den_sel_plots[[2]], layout_matrix = rbind(c(1,2)))
 ```
 
+## 2.1 Global (JPS)
+
+```{r}
+# group by seconds and then measure density
+jps_d = traj1_sf |> 
+  sf::st_drop_geometry() |> 
+  dplyr::mutate(sec = FR/8) |>  # 1 sec = 8 frames
+  dplyr::group_by(sec) |> 
+  dplyr::summarise(n = dplyr::n(),
+                   sec = sec) |> 
+  dplyr::mutate(
+    density = n / gcs_area
+  )
+
+gcs_d |> head()
+```
+### Plotting
+
+```{r, eval = F}
+jps_density = ggplot2::ggplot(jps_d)+
+  ggplot2::aes(x = sec,
+               y = density)+
+  ggplot2::geom_line()
+
+print(jps_density)
+```
+
+## 1.2 Divided (JPS)
+
+```{r, eval = F}
+# add area as a new column
+jps_den_div = list()
+for (i in 1:length(jps_joined_grouped)){
+  jps_den_div[[i]] = jps_joined_grouped[[i]] |> dplyr::mutate(area = gcs_area_div[i])
+}
+```
+
+```{r, eval = F}
+# find density for each group in each list
+jps_d_div = list()
+for (i in 1:length(gcs_area_div)){
+  jps_d_div[[i]] = jps_den_div[[i]] |> dplyr::mutate(density = n / gcs_area_div[i])
+}
+```
+
+### Plotting
+
+```{r, eval = F}
+jps_den_div_plots = list()
+for (i in 1:length(jps_d_div)){
+  jps_den_div_plots[[i]] = ggplot2::ggplot(jps_d_div[[i]]) +
+    ggplot2::aes(x = sec,
+                 y = density) +
+    ggplot2::geom_line() 
+}
+
+# let's plot a polygons 1-4 
+gridExtra::grid.arrange(jps_den_div_plots[[1]], jps_den_div_plots[[2]], jps_den_div_plots[[3]], jps_den_div_plots[[4]], layout_matrix = rbind(c(1,2),c(3,4)))
+```
+
+## 1.3 Selected (JPS)
+
+```{r, eval = F}
+# add area as a new column
+jps_den_sel = list()
+for (i in 1:length(jps_joined_zones)){
+  jps_den_sel[[i]] = jps_joined_grouped_zones[[i]] |> dplyr::mutate(area = gcs_area_sel[i])
+}
+```
+
+```{r, eval = F}
+# find density for each group in each list
+jps_d_sel = list()
+for (i in 1:length(jps_joined_zones)){
+  jps_d_sel[[i]] = jps_den_sel[[i]] |> dplyr::mutate(density = n / gcs_area_sel[i])
+}
+```
+
+### Plotting
+
+```{r, eval = F}
+jps_den_sel_plots = list()
+for (i in 1:length(jps_d_sel)){
+  jps_den_sel_plots[[i]] = ggplot2::ggplot(jps_d_sel[[i]]) +
+    ggplot2::aes(x = sec,
+                 y = density) +
+    ggplot2::geom_line() 
+}
+
+# let's plot a polygons 1-4 
+gridExtra::grid.arrange(jps_den_sel_plots[[1]], jps_den_sel_plots[[2]], layout_matrix = rbind(c(1,2)))
+```
+
 ## Comparison
 
 ### Global
