@@ -106,6 +106,8 @@ gcs_env_m = function(){
 gcs_env_m()
 ```
 
+![](figures/envir.png)
+
 ```{r, eval = F}
 # now, let's convert the env into an sf object
 matrix_walls = matrix(c(0,0,0,50,53,50, 53,0,0,0),
@@ -143,7 +145,7 @@ gcs_area_div = gcs_area_div |>
   as.vector()
 ```
 
-![](figures/envir.png)
+
 
 ```{r, eval =F}
 gcs_env_m()
