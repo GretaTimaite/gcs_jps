@@ -295,7 +295,7 @@ flow_comp = gcs_flow_plot
 ```
 
 ```{r, echo = F}
-readRDS("/Users/gretatimaite/Desktop/gcs_jps/figures/flow_comp.RDS")
+readRDS("/Users/gretatimaite/Desktop/gcs_jps/figures/flow_comp.png")
 ```
 
 
@@ -313,7 +313,7 @@ gridExtra::grid.arrange(flow_div_comp[[1]], flow_div_comp[[2]],flow_div_comp[[3]
 ```
 
 ```{r, echo = F}
-readRDS("/Users/gretatimaite/Desktop/gcs_jps/figures/flow_div_comp.RDS")
+readRDS("/Users/gretatimaite/Desktop/gcs_jps/figures/flow_div_comp.png")
 ```
 
 
@@ -331,7 +331,7 @@ gridExtra::grid.arrange(flow_sel_comp[[1]], flow_sel_comp[[2]], layout_matrix = 
 ```
 
 ```{r, echo = F}
-readRDS("/Users/gretatimaite/Desktop/gcs_jps/figures/flow_sel_comp.RDS")
+readRDS("/Users/gretatimaite/Desktop/gcs_jps/figures/flow_sel_comp.png")
 
 ```
 
