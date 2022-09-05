@@ -1,5 +1,5 @@
 ---
-title: "fd"
+title: "Fundamental diagrams"
 ---
 
 The aim of this chapter is to **plot fundamental diagrams** (speed ~ density) and compare them between JPS and GCS.
@@ -14,13 +14,11 @@ N -> number of agents
 
 Area -> an area in which agents are counted
 
-# Fundamental diagrams
-
 ## 1.1 Global (GCS)
 
 This builds on the previous chapter on density, hence density part will be skipped. Instead, let's move to finding out average speed per second.
 
-```{r}
+```{r, eval = F}
 # average speed per frame
 gcs_speed1 = gcs_sf_s |> 
   dplyr::group_by(sec) |> 
@@ -39,7 +37,7 @@ gcs_speed_joined = dplyr::left_join(gcs_speed, gcs_d)
 
 ## Plotting
 
-```{r}
+```{r, eval = F}
 gcs_fd = ggplot2::ggplot(data = gcs_speed_joined,
                 ggplot2::aes(x = density,
                             y = speed_av))+
@@ -50,7 +48,7 @@ gcs_fd = ggplot2::ggplot(data = gcs_speed_joined,
 
 To find out how density has been measured, see "Density" chapter.
 
-```{r}
+```{r, eval = F}
 # first create a list to store our new datasets 
 gcs_fd_div = list()
 for (i in 1:lengths(gcs_div_sf)){
@@ -58,7 +56,7 @@ for (i in 1:lengths(gcs_div_sf)){
 }
 ```
 
-```{r}
+```{r, eval = F}
 # a list with dataframes (denoting to different polygons) containing average speed of agents per frame
 gcs_speed_div = list()
 for (i in 1:lengths(gcs_div_sf)){
@@ -72,7 +70,7 @@ for (i in 1:lengths(gcs_div_sf)){
 }
 ```
 
-```{r}
+```{r, eval = F}
 # join dataframes in `gcs_speed_div` and `gcs_speed_div` lists accordingly (will help when plotting)
 gcs_fd_joined = list()
 for (i in 1:length(gcs_fd_div)){
@@ -83,7 +81,7 @@ for (i in 1:length(gcs_fd_div)){
 
 ### Plotting
 
-```{r}
+```{r, eval = F}
 gcs_div_plots = list()
 for (i in 1:length(gcs_fd_joined)){
   gcs_div_plots[[i]] = ggplot2::ggplot(gcs_fd_joined[[i]]) +
@@ -98,7 +96,7 @@ gridExtra::grid.arrange(gcs_div_plots[[1]], gcs_div_plots[[2]], gcs_div_plots[[3
 
 ## 1.3 Selected (GCS)
 
-```{r}
+```{r, eval = F}
 # first create a list to store our new datasets 
 gcs_fd_sel = list()
 for (i in 1:length(zones)){
@@ -106,7 +104,7 @@ for (i in 1:length(zones)){
 }
 ```
 
-```{r}
+```{r, eval = F}
 # a list with dataframes (denoting to different polygons) containing average speed of agents per frame
 gcs_speed_sel = list()
 for (i in 1:lengths(zones)){
@@ -120,7 +118,7 @@ for (i in 1:lengths(zones)){
 }
 ```
 
-```{r}
+```{r, eval = F}
 # join lists accordingly (will help when plotting)
 gcs_fd_joined = list()
 for (i in 1:length(zones)){
@@ -131,7 +129,7 @@ for (i in 1:length(zones)){
 
 ### Plotting
 
-```{r}
+```{r, eval = F}
 gcs_sel_plots = list()
 for (i in 1:length(gcs_fd_joined)){
   gcs_sel_plots[[i]] = ggplot2::ggplot(gcs_fd_joined[[i]]) +
