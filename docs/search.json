@@ -30,7 +30,7 @@
   {
     "objectID": "summary.html",
     "href": "summary.html",
-    "title": "3  Summary",
+    "title": "4  Summary",
     "section": "",
     "text": "1 + 1\n\n[1] 2"
   },
@@ -40,5 +40,33 @@
     "title": "1  Getting data",
     "section": "",
     "text": "# let's convert jps and gcs dataframes to sf objects, so we can perform spatial operations\n\ntraj1_sf = traj1 |> \n  sf::st_as_sf(coords = c(\"X\", \"Y\")) |> \n  dplyr::select(-c(3,4,5,6,7)) # drop columns we won't need\n\ngcs_sf = gcs |> \n  sf::st_as_sf(coords = c(\"x_coord\", \"y_coord\")) |> \n  dplyr::mutate(geometry = geometry/14) # convert from pixels to metres"
+  },
+  {
+    "objectID": "flow.html",
+    "href": "flow.html",
+    "title": "3  Flow",
+    "section": "",
+    "text": "# now let's create a new column for seconds\n# 1 second = 25 frames\ngcs_sf_s = gcs_sf |> \n  dplyr::mutate(sec = as.numeric(frame) / 25)\n\n# group df by seconds\ngcs_grouped = gcs_sf_s |> \n  sf::st_drop_geometry() |> #drop geometry as it's not needed here\n  dplyr::group_by(sec) |> # group by seconds\n  dplyr::summarise(n = dplyr::n()) # summarise \n\ngcs_grouped |> \n  head()\n\n\n\n\ngcs_flow_plot = ggplot2::ggplot(gcs_grouped) +\n  ggplot2::aes(x = sec,\n               y = n) +\n  ggplot2::geom_line()\ngcs_flow_plot \n\nWe could add add additional information by adding lines indicating mean and median for seconds and number of agents, but I’m not sure it tells us much…\n\n# let's calculate mean and median values of n to add to the plot\ngcs_mean_s = gcs_sf_s$sec |> mean()\ngcs_median_s = gcs_sf_s$sec |> median()\ngcs_mean_n = gcs_grouped$n |> mean()\ngcs_median_n = gcs_grouped$n |> median()\n\nggplot2::ggplot(gcs_grouped) +\n  ggplot2::aes(x = sec,\n               y = n) +\n  ggplot2::geom_line() +\n  ggplot2::geom_vline(xintercept = gcs_mean_s,\n                      col = \"red\") +\n  ggplot2::geom_text(ggplot2::aes(x=gcs_mean_s+5, label=paste0(\"Mean\\n\",round(gcs_mean_s,2)), y=80)) +\n  ggplot2::geom_vline(xintercept = gcs_median_s, \n                      col = \"blue\") +\n  ggplot2::geom_hline(yintercept = gcs_mean_n,\n                      col = \"red\") +\n  ggplot2::geom_hline(yintercept = gcs_median_n,\n                      col = \"blue\")"
+  },
+  {
+    "objectID": "flow.html#divided-flow-gcs",
+    "href": "flow.html#divided-flow-gcs",
+    "title": "3  Flow",
+    "section": "3.2 2. Divided flow (GCS)",
+    "text": "3.2 2. Divided flow (GCS)\n\n# first create a list to store our multiple dataframes\ngcs_joined = list()\nfor (i in 1:lengths(gcs_div_sf)){\n  gcs_joined[[i]] = gcs_sf_s[gcs_div_sf[i,], op = sf::st_intersects] # all intersecting points will be selected\n}\n\n# sanity check\ngcs_joined1 = gcs_sf_s[gcs_div_sf[1,], op = sf::st_intersects]\ngcs_joined2 = gcs_sf_s[gcs_div_sf[2,], op = sf::st_intersects]\nidentical(gcs_joined1, gcs_joined[[1]]) # TRUE\nidentical(gcs_joined2, gcs_joined[[2]]) # TRUE\n\n\n# group each sf object by seconds and make a list out of them\ngcs_joined_grouped = list()\nfor (i in 1:length(gcs_joined)){\n  gcs_joined_grouped[[i]] = gcs_joined[[i]] |> \n    sf::st_drop_geometry() |> \n    dplyr::group_by(sec) |> \n    dplyr::summarise(n = dplyr::n())\n}\n\n# sanity check comparison (alert: ugly code!)\nidentical(gcs_joined_grouped[[1]], # first list of a list that was just made\n          gcs_joined[[1]] |> # repeating the same code as in the loop above but only on 1 (the first) list \n            sf::st_drop_geometry() |> \n            dplyr::group_by(sec) |> \n            dplyr::summarise(n = dplyr::n()))\n\n\n3.2.1 Plotting\nIn the plot showing flow in the entire GCS environment, I added means and medians but this time I will exclude them as I do not know if it’s valuable to have them at this stage. Plus, it will make the code shorter.\n\n# let's create a list of plots showing flow in each polygon\ngcs_flow_div_plots = list()\nfor (i in 1:length(gcs_joined_grouped)){\n  gcs_flow_div_plots[[i]] = ggplot2::ggplot(gcs_joined_grouped[[i]]) +\n    ggplot2::aes(x = sec,\n                 y = n) +\n    ggplot2::geom_line() \n  # print(gcs_flow_div_plots)\n}\n\n\n# let's plot a polygons 1-4 \ngridExtra::grid.arrange(gcs_flow_div_plots[[1]], gcs_flow_div_plots[[2]],gcs_flow_div_plots[[3]],gcs_flow_div_plots[[4]], layout_matrix = rbind(c(1,2),c(3,4)))"
+  },
+  {
+    "objectID": "flow.html#selected-gcs",
+    "href": "flow.html#selected-gcs",
+    "title": "3  Flow",
+    "section": "3.3 3. Selected (GCS)",
+    "text": "3.3 3. Selected (GCS)\n\n# a list to store our 2 dataframes for the selected areas\ngcs_joined_zones = list()\nfor (i in 1:length(zones)){\n  gcs_joined_zones[[i]] = gcs_sf_s[zones[[i]], op = sf::st_intersects] # all intersecting points will be selected\n}\n\n# sanity check\ngcs_joined_zones1 = gcs_sf_s[zones[[1]], op = sf::st_intersects]\nidentical(gcs_joined_zones1, gcs_joined_zones[[1]]) # TRUE\n\n\n# group each sf object by seconds and make a list out of them\ngcs_joined_grouped_zones = list()\nfor (i in 1:length(gcs_joined_zones)){\n  gcs_joined_grouped_zones[[i]] = gcs_joined_zones[[i]] |> \n    sf::st_drop_geometry() |> \n    dplyr::group_by(sec) |> \n    dplyr::summarise(n = dplyr::n())\n}\n\n# sanity check comparison (alert: ugly code!)\nidentical(gcs_joined_grouped_zones[[1]], # first list of a list that was just made\n          gcs_joined_zones[[1]] |> # repeating the same code as in the loop above but only on 1 (the first) list \n            sf::st_drop_geometry() |> \n            dplyr::group_by(sec) |> \n            dplyr::summarise(n = dplyr::n()))\n\n\n3.3.1 Plotting\n\n# let's create a list of plots showing flow in each polygon\ngcs_flow_zones_plots = list()\nfor (i in 1:length(gcs_joined_grouped_zones)){\n  gcs_flow_zones_plots[[i]] = ggplot2::ggplot(gcs_joined_grouped_zones[[i]]) +\n    ggplot2::aes(x = sec,\n                 y = n) +\n    ggplot2::geom_line() \n  # print(gcs_flow_zones_plots )\n}\n\ngridExtra::grid.arrange(gcs_flow_zones_plots[[1]], gcs_flow_zones_plots[[2]], layout_matrix = rbind(c(1,2),c(3,4)))"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "gcs_jps",
+    "section": "",
+    "text": "This is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books.\n\n1 + 1\n\n[1] 2"
   }
 ]
