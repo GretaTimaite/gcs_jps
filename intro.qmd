@@ -1,6 +1,6 @@
 # Getting data
 
-```{r}
+```{r, eval = F}
 # trajectory data
 traj1 = read.table("/Users/gretatimaite/Desktop/pedestrian_simulation/final_results/8_frame/1/traj.txt",
                    col.names = c("ID",	"FR",	"X",	"Y",	"Z",	"A",	"B",	"ANGLE",	"COLOR"))
@@ -12,7 +12,7 @@ traj1 |> dplyr::glimpse()
 gcs = sf::read_sf("https://github.com/GretaTimaite/pedestrian_simulation/releases/download/data/frames_final.csv")
 ```
 
-```{r}
+```{r, eval = F}
 # let's convert jps and gcs dataframes to sf objects, so we can perform spatial operations
 
 traj1_sf = traj1 |> 
