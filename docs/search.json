@@ -18,14 +18,14 @@
     "href": "envir.html#divided",
     "title": "2  Environment",
     "section": "2.2 Divided",
-    "text": "2.2 Divided\n\n# divide gcs polygon by creating a grid\ngcs_div = sf::st_make_grid(polygon_walls, \n                           n = 2,\n                           what = \"polygons\")\n\n# convert gcs_div to an sf object\ngcs_div_sf = gcs_div |> \n  sf::st_as_sf() |> \n  dplyr::rename(geom = x)\n\n# find out the area size of each polygon\ngcs_area_div = list()\nfor (i in 1:lengths(gcs_div_sf)){\n  gcs_area_div[[i]] = sf::st_area(gcs_div_sf[[i]]) \n  # print(gcs_area_div)\n}\n# make it a vector\ngcs_area_div = gcs_area_div |>\n  unlist() |>\n  as.vector()"
+    "text": "2.2 Divided\n\n# divide gcs polygon by creating a grid\ngcs_div = sf::st_make_grid(polygon_walls, \n                           n = 2,\n                           what = \"polygons\")\n\n# convert gcs_div to an sf object\ngcs_div_sf = gcs_div |> \n  sf::st_as_sf() |> \n  dplyr::rename(geom = x)\n\n# find out the area size of each polygon\ngcs_area_div = list()\nfor (i in 1:lengths(gcs_div_sf)){\n  gcs_area_div[[i]] = sf::st_area(gcs_div_sf[[i]]) \n  # print(gcs_area_div)\n}\n# make it a vector\ngcs_area_div = gcs_area_div |>\n  unlist() |>\n  as.vector()\n\n\n\ngcs_env_m()\ngcs_div_sf |> plot(add = T)\ngcs_div_sf[1,] |> plot(add = T, col = \"yellow\")\ngcs_div_sf[2,] |> plot(add = T, col = \"green\")\ngcs_div_sf[3,] |> plot(add = T, col = \"purple\")\ntext(x = 15,\n       y = 15,\n       label = \"polygon 1\")\ntext(x = 40,\n       y = 15,\n       label = \"polygon 2\")\ntext(x = 15,\n       y = 40,\n       label = \"polygon 3\")\ntext(x = 40,\n       y = 40,\n       label = \"polygon 4\")"
   },
   {
     "objectID": "envir.html#selected",
     "href": "envir.html#selected",
     "title": "2  Environment",
     "section": "2.3 Selected",
-    "text": "2.3 Selected\nTwo areas have been selected based on the results of the previous work: https://github.com/Urban-Analytics/uncertainty/blob/master/gcs/process.ipynb Hence, it’s zone 1 (exit 0) and zone 2 (around exit 5) One cell is 2x2, each zone is 5 (width) and 6 (length) cells, thus 10 and 12 metres accordingly\nZone 1 is next to exit 0, thus its length has been left equal to the length of the gates. The width has been approximated to 10 metres (1 pixel = 2 metres).\nZone 2 is on the opposite side to Zone 1 and is 1 pixel below comapred to Zone 1, thus around exit 5.\n\n## zone 1 (it's next to exit 0)\ngcs_env_m()\npolygon(x = c(10, 0, 0, 10),\n        y = c(28, 28, 10, 10),\n        border = \"blue\",\n        lwd = 2)\n\n## zone 2\n# gcs_env_m()\npolygon(x = c(53, 43, 43, 53),\n        y = c(26, 26, 8, 8),\n        border = \"blue\",\n        lwd = 2)\n\n# zone 1 sf polygon\nzone1_matrix = matrix(c(10, 28, 0, 28, 0, 10, 10, 10, 10, 28),\n                      ncol = 2,\n                      byrow = T)\nzone1_matrix_list = list(zone1_matrix)\nzone1 = sf::st_polygon(zone1_matrix_list)\n\n# zone 2 sf polygon\nzone2_matrix = matrix(c(53, 26, 43, 26, 43, 8, 53, 8, 53, 26),\n                      ncol = 2,\n                      byrow = T)\nzone2_matrix_list = list(zone2_matrix)\nzone2 = sf::st_polygon(zone2_matrix_list)\n\n# checking where selected areas are\ngcs_env_m()\nzone1 |> plot(add = T, border = \"green\", lwd = 2)\nzone2 |> plot(add = T, border = \"green\", lwd = 2)\n\n# join both zones\nzones = list(zone1, zone2)\n\n# find out the area size of each polygon\ngcs_area_sel = list()\nfor (i in 1:length(zones)){\n  gcs_area_sel[[i]] = sf::st_area(zones[[i]]) \n  # print(gcs_area_div)\n}\n# make it a vector\ngcs_area_sel = gcs_area_sel |>\n  unlist() |>\n  as.vector()"
+    "text": "2.3 Selected\nTwo areas have been selected based on the results of the previous work: https://github.com/Urban-Analytics/uncertainty/blob/master/gcs/process.ipynb Hence, it’s zone 1 (exit 0) and zone 2 (around exit 5) One cell is 2x2, each zone is 5 (width) and 6 (length) cells, thus 10 and 12 metres accordingly\nZone 1 is next to exit 0, thus its length has been left equal to the length of the gates. The width has been approximated to 10 metres (1 pixel = 2 metres).\nZone 2 is on the opposite side to Zone 1 and is 1 pixel below comapred to Zone 1, thus around exit 5.\n\n## zone 1 (it's next to exit 0)\ngcs_env_m()\npolygon(x = c(10, 0, 0, 10),\n        y = c(28, 28, 10, 10),\n        border = \"blue\",\n        lwd = 2)\n\n## zone 2\n# gcs_env_m()\npolygon(x = c(53, 43, 43, 53),\n        y = c(26, 26, 8, 8),\n        border = \"blue\",\n        lwd = 2)\n\n# zone 1 sf polygon\nzone1_matrix = matrix(c(10, 28, 0, 28, 0, 10, 10, 10, 10, 28),\n                      ncol = 2,\n                      byrow = T)\nzone1_matrix_list = list(zone1_matrix)\nzone1 = sf::st_polygon(zone1_matrix_list)\n\n# zone 2 sf polygon\nzone2_matrix = matrix(c(53, 26, 43, 26, 43, 8, 53, 8, 53, 26),\n                      ncol = 2,\n                      byrow = T)\nzone2_matrix_list = list(zone2_matrix)\nzone2 = sf::st_polygon(zone2_matrix_list)\n\n# checking where selected areas are\ngcs_env_m()\nzone1 |> plot(add = T, border = \"green\", lwd = 2)\nzone2 |> plot(add = T, border = \"green\", lwd = 2)\n\n# join both zones\nzones = list(zone1, zone2)\n\n# find out the area size of each polygon\ngcs_area_sel = list()\nfor (i in 1:length(zones)){\n  gcs_area_sel[[i]] = sf::st_area(zones[[i]]) \n  # print(gcs_area_div)\n}\n# make it a vector\ngcs_area_sel = gcs_area_sel |>\n  unlist() |>\n  as.vector()\n\n\ngcs_env_m()\nzones[[1]] |> plot(add = T, col = \"green\")\nzones[[2]] |> plot(add = T, col = \"yellow\")\ntext(x = 10,\n     y = 20,\n     label = \"Zone 1\")\ntext(x = 45,\n     y = 20,\n     label = \"Zone 2\")"
   },
   {
     "objectID": "summary.html",
@@ -129,14 +129,35 @@
     "objectID": "density.html#comparison",
     "href": "density.html#comparison",
     "title": "4  Density",
-    "section": "4.4 Comparison",
-    "text": "4.4 Comparison\n\n4.4.1 Global\n\ndensity_comp = gcs_density + \n  # ggplot2::ggplot(jps_grouped) +\n  ggplot2::geom_line(data = jps_d,\n                     color = \"red\")\n\n\n\n\n4.4.2 Divided\n\ndensity_div_comp = list()\nfor (i in 1:length(gcs_den_div_plots)) {\n  density_div_comp[[i]] = gcs_den_div_plots[[i]] + \n  ggplot2::geom_line(data = jps_d_div[[i]],\n                     color = \"red\")\n}\n\ngridExtra::grid.arrange(density_div_comp[[1]], density_div_comp[[2]], density_div_comp[[3]], density_div_comp[[4]], layout_matrix = rbind(c(1,2),c(3,4)))"
+    "section": "4.7 Comparison",
+    "text": "4.7 Comparison\n\n4.7.1 Global\n\ndensity_comp = gcs_density + \n  # ggplot2::ggplot(jps_grouped) +\n  ggplot2::geom_line(data = jps_d,\n                     color = \"red\")\n\n\n\n\n4.7.2 Divided\n\ndensity_div_comp = list()\nfor (i in 1:length(gcs_den_div_plots)) {\n  density_div_comp[[i]] = gcs_den_div_plots[[i]] + \n  ggplot2::geom_line(data = jps_d_div[[i]],\n                     color = \"red\")\n}\n\ngridExtra::grid.arrange(density_div_comp[[1]], density_div_comp[[2]], density_div_comp[[3]], density_div_comp[[4]], layout_matrix = rbind(c(1,2),c(3,4)))"
   },
   {
     "objectID": "density.html#selected",
     "href": "density.html#selected",
     "title": "4  Density",
-    "section": "4.5 Selected",
-    "text": "4.5 Selected\n\nflow_sel_comp = list()\nfor (i in 1:length(gcs_flow_zones_plots)) {\n  flow_sel_comp[[i]] = gcs_flow_zones_plots[[i]] + \n  ggplot2::geom_line(data = jps_joined_grouped_zones[[i]],\n                     color = \"red\")\n}\n\ngridExtra::grid.arrange(flow_sel_comp[[1]], flow_sel_comp[[2]], layout_matrix = rbind(c(1,2)))"
+    "section": "4.8 Selected",
+    "text": "4.8 Selected\n\nflow_sel_comp = list()\nfor (i in 1:length(gcs_flow_zones_plots)) {\n  flow_sel_comp[[i]] = gcs_flow_zones_plots[[i]] + \n  ggplot2::geom_line(data = jps_joined_grouped_zones[[i]],\n                     color = \"red\")\n}\n\ngridExtra::grid.arrange(flow_sel_comp[[1]], flow_sel_comp[[2]], layout_matrix = rbind(c(1,2)))"
+  },
+  {
+    "objectID": "density.html#global-jps",
+    "href": "density.html#global-jps",
+    "title": "4  Density",
+    "section": "4.4 2.1 Global (JPS)",
+    "text": "4.4 2.1 Global (JPS)\n\n# group by seconds and then measure density\njps_d = traj1_sf |> \n  sf::st_drop_geometry() |> \n  dplyr::mutate(sec = FR/8) |>  # 1 sec = 8 frames\n  dplyr::group_by(sec) |> \n  dplyr::summarise(n = dplyr::n(),\n                   sec = sec) |> \n  dplyr::mutate(\n    density = n / gcs_area\n  )\n\ngcs_d |> head()\n\n\n4.4.1 Plotting\n\njps_density = ggplot2::ggplot(jps_d)+\n  ggplot2::aes(x = sec,\n               y = density)+\n  ggplot2::geom_line()\n\nprint(jps_density)"
+  },
+  {
+    "objectID": "density.html#divided-jps",
+    "href": "density.html#divided-jps",
+    "title": "4  Density",
+    "section": "4.5 2.2 Divided (JPS)",
+    "text": "4.5 2.2 Divided (JPS)\n\n# add area as a new column\njps_den_div = list()\nfor (i in 1:length(jps_joined_grouped)){\n  jps_den_div[[i]] = jps_joined_grouped[[i]] |> dplyr::mutate(area = gcs_area_div[i])\n}\n\n\n# find density for each group in each list\njps_d_div = list()\nfor (i in 1:length(gcs_area_div)){\n  jps_d_div[[i]] = jps_den_div[[i]] |> dplyr::mutate(density = n / gcs_area_div[i])\n}\n\n\n4.5.1 Plotting\n\njps_den_div_plots = list()\nfor (i in 1:length(jps_d_div)){\n  jps_den_div_plots[[i]] = ggplot2::ggplot(jps_d_div[[i]]) +\n    ggplot2::aes(x = sec,\n                 y = density) +\n    ggplot2::geom_line() \n}\n\n# let's plot a polygons 1-4 \ngridExtra::grid.arrange(jps_den_div_plots[[1]], jps_den_div_plots[[2]], jps_den_div_plots[[3]], jps_den_div_plots[[4]], layout_matrix = rbind(c(1,2),c(3,4)))"
+  },
+  {
+    "objectID": "density.html#selected-jps",
+    "href": "density.html#selected-jps",
+    "title": "4  Density",
+    "section": "4.6 2.3 Selected (JPS)",
+    "text": "4.6 2.3 Selected (JPS)\n\n# add area as a new column\njps_den_sel = list()\nfor (i in 1:length(jps_joined_zones)){\n  jps_den_sel[[i]] = jps_joined_grouped_zones[[i]] |> dplyr::mutate(area = gcs_area_sel[i])\n}\n\n\n# find density for each group in each list\njps_d_sel = list()\nfor (i in 1:length(jps_joined_zones)){\n  jps_d_sel[[i]] = jps_den_sel[[i]] |> dplyr::mutate(density = n / gcs_area_sel[i])\n}\n\n\n4.6.1 Plotting\n\njps_den_sel_plots = list()\nfor (i in 1:length(jps_d_sel)){\n  jps_den_sel_plots[[i]] = ggplot2::ggplot(jps_d_sel[[i]]) +\n    ggplot2::aes(x = sec,\n                 y = density) +\n    ggplot2::geom_line() \n}\n\n# let's plot a polygons 1-4 \ngridExtra::grid.arrange(jps_den_sel_plots[[1]], jps_den_sel_plots[[2]], layout_matrix = rbind(c(1,2)))"
   }
 ]
