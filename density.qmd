@@ -140,7 +140,7 @@ jps_density = ggplot2::ggplot(jps_d)+
 print(jps_density)
 ```
 
-## 1.2 Divided (JPS)
+## 2.2 Divided (JPS)
 
 ```{r, eval = F}
 # add area as a new column
@@ -173,7 +173,7 @@ for (i in 1:length(jps_d_div)){
 gridExtra::grid.arrange(jps_den_div_plots[[1]], jps_den_div_plots[[2]], jps_den_div_plots[[3]], jps_den_div_plots[[4]], layout_matrix = rbind(c(1,2),c(3,4)))
 ```
 
-## 1.3 Selected (JPS)
+## 2.3 Selected (JPS)
 
 ```{r, eval = F}
 # add area as a new column
