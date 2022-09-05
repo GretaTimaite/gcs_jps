@@ -1,0 +1,81 @@
+---
+title: "Density"
+---
+
+Density = N / m2
+
+N = number of agents
+
+## 1.1 Global (GCS)
+
+```{r, eval = F}
+# group by seconds and then measure density
+gcs_d = gcs_sf |> 
+  sf::st_drop_geometry() |> 
+  dplyr::mutate(sec = as.numeric(frame)/25) |>  # 1 sec = 25 frames
+  dplyr::group_by(sec) |> 
+  dplyr::summarise(n = dplyr::n(),
+                   frame = frame) |> 
+  dplyr::mutate(
+    density = n / gcs_area 
+  )
+
+gcs_d |> head()
+```
+
+### Plotting
+
+```{r, eval = F}
+gcs_density = ggplot2::ggplot(gcs_d)+
+  ggplot2::aes(x = sec,
+               y = density)+
+  ggplot2::geom_line()
+
+print(gcs_density)
+```
+
+Density plot looks exactly the same as flow plot.
+
+```{r, eval = F}
+ggplot2::ggplot(gcs_d)+
+  ggplot2::aes(x = sec,
+               y = density)+
+  ggplot2::geom_line() +
+  ggplot2::geom_line(data = gcs_d,
+                     ggplot2::aes(x = sec,
+                                  y = n),
+                     col = "red")
+```
+
+## Divided GCS density
+
+```{r, eval = F}
+# add area as a new column
+gcs_den_div = list()
+for (i in 1:length(gcs_joined_grouped)){
+  gcs_den_div[[i]] = gcs_joined_grouped[[i]] |> dplyr::mutate(area = gcs_area_div[i])
+}
+```
+
+```{r, eval = F}
+# find density for each group in each list
+gcs_d_div = list()
+for (i in 1:length(gcs_area_div)){
+  gcs_d_div[[i]] = gcs_den_div[[i]] |> dplyr::mutate(density = n / gcs_area_div[i])
+}
+```
+
+### Plotting
+
+```{r, eval = F}
+gcs_den_plots = list()
+for (i in 1:length(gcs_d_div)){
+  gcs_den_plots[[i]] = ggplot2::ggplot(gcs_d_div[[i]]) +
+    ggplot2::aes(x = sec,
+                 y = density) +
+    ggplot2::geom_line() 
+}
+
+# let's plot a polygons 1-4 and 5-8
+gridExtra::grid.arrange(gcs_den_plots[[1]], gcs_den_plots[[2]], gcs_den_plots[[3]], gcs_den_plots[[4]], layout_matrix = rbind(c(1,2),c(3,4)))
+```
