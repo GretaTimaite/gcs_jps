@@ -20,14 +20,12 @@ gcs_grouped |>
 
 ### Plotting
 
-```{r}
-
+```{r, eval = F}
 gcs_flow_plot = ggplot2::ggplot(gcs_grouped) +
   ggplot2::aes(x = sec,
                y = n) +
   ggplot2::geom_line()
 gcs_flow_plot 
-
 ```
 
 
