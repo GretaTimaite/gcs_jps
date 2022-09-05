@@ -283,6 +283,45 @@ for (i in 1:length(jps_joined_grouped_zones)){
 gridExtra::grid.arrange(jps_flow_zones_plots[[1]], jps_flow_zones_plots[[2]], layout_matrix = rbind(c(1,2),c(3,4)))
 ```
 
+## Comparison
+
+In this subsection we will overlay GCS and JPS plots to compare flows.
+
+### Global
+
+```{r, eval = F}
+flow_comp = gcs_flow_plot + 
+  # ggplot2::ggplot(jps_grouped) +
+  ggplot2::geom_line(data = jps_grouped,
+                     color = "red")
+
+```
+
+### Divided
+
+```{r, eval = F}
+flow_div_comp = list()
+for (i in 1:length(gcs_flow_div_plots)) {
+  flow_div_comp[[i]] = gcs_flow_div_plots[[i]] + 
+  ggplot2::geom_line(data = jps_joined_grouped[[i]],
+                     color = "red")
+}
+
+gridExtra::grid.arrange(flow_div_comp[[1]], flow_div_comp[[2]],flow_div_comp[[3]],flow_div_comp[[4]], layout_matrix = rbind(c(1,2),c(3,4)))
+```
+
+## Selected
+
+```{r, eval = F}
+flow_sel_comp = list()
+for (i in 1:length(gcs_flow_zones_plots)) {
+  flow_sel_comp[[i]] = gcs_flow_zones_plots[[i]] + 
+  ggplot2::geom_line(data = jps_joined_grouped_zones[[i]],
+                     color = "red")
+}
+
+gridExtra::grid.arrange(flow_sel_comp[[1]], flow_sel_comp[[2]], layout_matrix = rbind(c(1,2)))
+```
 
 
 
