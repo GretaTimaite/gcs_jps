@@ -1,0 +1,149 @@
+---
+title: "fd"
+---
+
+The aim of this chapter is to **plot fundamental diagrams** (speed ~ density) and compare them between JPS and GCS.
+
+A fundamental diagram denotes to the linear relationship between average speed (or velocity) and density (or flow) of an agent, usually vehicles or pedestrians.
+
+Density = N/Area
+
+Speed(av) = sum(agent distance per frame)/N
+
+N -> number of agents
+
+Area -> an area in which agents are counted
+
+# Fundamental diagrams
+
+## 1.1 Global (GCS)
+
+This builds on the previous chapter on density, hence density part will be skipped. Instead, let's move to finding out average speed per second.
+
+```{r}
+# average speed per frame
+gcs_speed1 = gcs_sf_s |> 
+  dplyr::group_by(sec) |> 
+  dplyr::summarise(n = dplyr::n()) 
+gcs_speed2 = gcs_sf_s |> 
+  dplyr::mutate(dist = as.numeric(dist)) |> 
+  dplyr::filter(dist != 0) |> # filter our starting points (ie the rows that have dist = 0)
+  dplyr::group_by(sec) |> 
+  dplyr::summarise(dist_sum = sum(dist)) |>  # summing up the total distance of agents in a group
+  sf::st_drop_geometry() # drop geometry column
+gcs_speed = dplyr::left_join(gcs_speed1, gcs_speed2) |> 
+  dplyr::mutate(speed_av = dist_sum/n) # average speed (see formula at the start of the notebook)
+gcs_speed_joined = dplyr::left_join(gcs_speed, gcs_d)
+
+```
+
+## Plotting
+
+```{r}
+gcs_fd = ggplot2::ggplot(data = gcs_speed_joined,
+                ggplot2::aes(x = density,
+                            y = speed_av))+
+  ggplot2::geom_point()
+```
+
+## 1.2 Divided (GCS)
+
+To find out how density has been measured, see "Density" chapter.
+
+```{r}
+# first create a list to store our new datasets 
+gcs_fd_div = list()
+for (i in 1:lengths(gcs_div_sf)){
+  gcs_fd_div[[i]] = gcs_sf_s[gcs_div_sf[i,], op = sf::st_intersects] 
+}
+```
+
+```{r}
+# a list with dataframes (denoting to different polygons) containing average speed of agents per frame
+gcs_speed_div = list()
+for (i in 1:lengths(gcs_div_sf)){
+  gcs_speed_div[[i]] = gcs_fd_div[[i]] |> 
+    dplyr::mutate(dist = as.numeric(dist)) |> # turn character into numeric
+    dplyr::filter(dist != 0) |> # filter out agent starting points (eg distance = 0)
+    dplyr::group_by(sec) |> 
+    dplyr::summarise(n = dplyr::n(), # number of agents per frame
+                     dist_sum = sum(dist), # total sum
+                     speed_av = dist_sum / n) # average speed
+}
+```
+
+```{r}
+# join dataframes in `gcs_speed_div` and `gcs_speed_div` lists accordingly (will help when plotting)
+gcs_fd_joined = list()
+for (i in 1:length(gcs_fd_div)){
+  gcs_fd_joined[[i]] = dplyr::left_join(gcs_speed_div[[i]] |> sf::st_drop_geometry(),
+                                    gcs_d_div[[i]] |> sf::st_drop_geometry())
+}
+```
+
+### Plotting
+
+```{r}
+gcs_div_plots = list()
+for (i in 1:length(gcs_fd_joined)){
+  gcs_div_plots[[i]] = ggplot2::ggplot(gcs_fd_joined[[i]]) +
+    ggplot2::aes(x = density,
+                 y = speed_av) +
+    ggplot2::geom_point() 
+  # print(plots_den)
+}
+gridExtra::grid.arrange(gcs_div_plots[[1]], gcs_div_plots[[2]], gcs_div_plots[[3]], gcs_div_plots[[4]], layout_matrix = rbind(c(1,2),c(3,4)))
+
+```
+
+## 1.3 Selected (GCS)
+
+```{r}
+# first create a list to store our new datasets 
+gcs_fd_sel = list()
+for (i in 1:length(zones)){
+  gcs_fd_sel[[i]] = gcs_sf_s[gcs_div_sf[i,], op = sf::st_intersects] 
+}
+```
+
+```{r}
+# a list with dataframes (denoting to different polygons) containing average speed of agents per frame
+gcs_speed_sel = list()
+for (i in 1:lengths(zones)){
+  jps_speed_sel[[i]] = gcs_fd_sel[[i]] |> 
+    dplyr::mutate(dist = as.numeric(dist)) |> # turn character into numeric
+    dplyr::filter(dist != 0) |> # filter out agent starting points (eg distance = 0)
+    dplyr::group_by(sec) |> 
+    dplyr::summarise(n = dplyr::n(), # number of agents per frame
+                     dist_sum = sum(dist), # total sum
+                     speed_av = dist_sum / n) # average speed
+}
+```
+
+```{r}
+# join lists accordingly (will help when plotting)
+gcs_fd_joined = list()
+for (i in 1:length(zones)){
+  gcs_fd_joined[[i]] = dplyr::left_join(gcs_speed_div[[i]] |> sf::st_drop_geometry(),
+                                    gcs_d_div[[i]] |> sf::st_drop_geometry())
+}
+```
+
+### Plotting
+
+```{r}
+gcs_sel_plots = list()
+for (i in 1:length(gcs_fd_joined)){
+  gcs_sel_plots[[i]] = ggplot2::ggplot(gcs_fd_joined[[i]]) +
+    ggplot2::aes(x = density,
+                 y = speed_av) +
+    ggplot2::geom_point() 
+  # print(plots_den)
+}
+
+gridExtra::grid.arrange(gcs_sel_plots[[1]], gcs_sel_plots[[2]], layout_matrix = rbind(c(1,2)))
+
+```
+
+
+
