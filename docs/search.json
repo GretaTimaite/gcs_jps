@@ -68,5 +68,26 @@
     "title": "gcs_jps",
     "section": "",
     "text": "This is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "flow.html#global-jps",
+    "href": "flow.html#global-jps",
+    "title": "3  Flow",
+    "section": "3.4 1.2 Global (JPS)",
+    "text": "3.4 1.2 Global (JPS)\n\n# now let's create a new column for seconds\n# 1 second = 25 frames\njps_s = traj1_sf |> \n  dplyr::mutate(sec = FR / 25)\n\n# group df by seconds\njps_grouped = jps_s |> \n  sf::st_drop_geometry() |> #drop geometry as it's not needed here\n  dplyr::group_by(sec) |> # group by seconds\n  dplyr::summarise(n = dplyr::n()) # summarise \n\njps_grouped |> \n  head()\n\n\n3.4.1 Plotting\n\njps_flow_plot = ggplot2::ggplot(jps_grouped) +\n  ggplot2::aes(x = sec,\n               y = n) +\n  ggplot2::geom_line()\njps_flow_plot"
+  },
+  {
+    "objectID": "flow.html#divided-flow-jps",
+    "href": "flow.html#divided-flow-jps",
+    "title": "3  Flow",
+    "section": "3.5 2. Divided flow (JPS)",
+    "text": "3.5 2. Divided flow (JPS)\n\n# first create a list to store our multiple dataframes\njps_joined = list()\nfor (i in 1:lengths(gcs_div_sf)){\n  jps_joined[[i]] = jps_s[gcs_div_sf[i,], op = sf::st_intersects] # all intersecting points will be selected\n}\n\n# sanity check\njps_joined1 = jps_s[gcs_div_sf[1,], op = sf::st_intersects]\nidentical(jps_joined1, jps_joined[[1]]) # TRUE\n\n\n# group each sf object by seconds and make a list out of them\njps_joined_grouped = list()\nfor (i in 1:length(jps_joined)){\n  jps_joined_grouped[[i]] = jps_joined[[i]] |> \n    sf::st_drop_geometry() |> \n    dplyr::group_by(sec) |> \n    dplyr::summarise(n = dplyr::n())\n}\n\n# sanity check comparison (alert: ugly code!)\nidentical(jps_joined_grouped[[1]], # first list of a list that was just made\n          jps_joined[[1]] |> # repeating the same code as in the loop above but only on 1 (the first) list \n            sf::st_drop_geometry() |> \n            dplyr::group_by(sec) |> \n            dplyr::summarise(n = dplyr::n()))\n\n\n3.5.1 Plotting\n\n# let's create a list of plots showing flow in each polygon\njps_flow_div_plots = list()\nfor (i in 1:length(jps_joined_grouped)){\n  jps_flow_div_plots[[i]] = ggplot2::ggplot(jps_joined_grouped[[i]]) +\n    ggplot2::aes(x = sec,\n                 y = n) +\n    ggplot2::geom_line() \n  # print(gcs_flow_div_plots)\n}\n\n\n# let's plot polygons 1-4 \ngridExtra::grid.arrange(jps_flow_div_plots[[1]], jps_flow_div_plots[[2]],jps_flow_div_plots[[3]],jps_flow_div_plots[[4]], layout_matrix = rbind(c(1,2),c(3,4)))"
+  },
+  {
+    "objectID": "flow.html#selected-jps",
+    "href": "flow.html#selected-jps",
+    "title": "3  Flow",
+    "section": "3.6 3. Selected (JPS)",
+    "text": "3.6 3. Selected (JPS)\n\n# a list to store our 2 dataframes for the selected areas\njps_joined_zones = list()\nfor (i in 1:length(zones)){\n  jps_joined_zones[[i]] = jps_s[zones[[i]], op = sf::st_intersects] # all intersecting points will be selected\n}\n\n# sanity check\njps_joined_zones1 = jps_s[zones[[1]], op = sf::st_intersects]\nidentical(jps_joined_zones1, jps_joined_zones[[1]]) # TRUE\n\n\n# group each sf object by seconds and make a list out of them\njps_joined_grouped_zones = list()\nfor (i in 1:length(jps_joined_zones)){\n  jps_joined_grouped_zones[[i]] = jps_joined_zones[[i]] |> \n    sf::st_drop_geometry() |> \n    dplyr::group_by(sec) |> \n    dplyr::summarise(n = dplyr::n())\n}\n\n# sanity check comparison (alert: ugly code!)\nidentical(jps_joined_grouped_zones[[1]], # first list of a list that was just made\n          jps_joined_zones[[1]] |> # repeating the same code as in the loop above but only on 1 (the first) list \n            sf::st_drop_geometry() |> \n            dplyr::group_by(sec) |> \n            dplyr::summarise(n = dplyr::n()))\n\n\n3.6.1 Plotting\n\n# let's create a list of plots showing flow in each polygon\njps_flow_zones_plots = list()\nfor (i in 1:length(jps_joined_grouped_zones)){\n  jps_flow_zones_plots[[i]] = ggplot2::ggplot(jps_joined_grouped_zones[[i]]) +\n    ggplot2::aes(x = sec,\n                 y = n) +\n    ggplot2::geom_line() \n  # print(gcs_flow_zones_plots )\n}\n\ngridExtra::grid.arrange(jps_flow_zones_plots[[1]], jps_flow_zones_plots[[2]], layout_matrix = rbind(c(1,2),c(3,4)))"
   }
 ]
