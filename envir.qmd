@@ -5,7 +5,7 @@ In this section we will prepare the environment for further analysis.
 Concourse parameters: width(x) = 53, height(y) = 50;
 
 ## Global
-```{r}
+```{r, eval = F}
 # First let's define an area in metres
 gcs_env_m = function(){
   plot((-250 /14):(900/14), (-250/14):(900/14), col = "white", xlab = "X", ylab = "Y") # draw an empty plot
