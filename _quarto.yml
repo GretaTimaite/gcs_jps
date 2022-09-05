@@ -12,6 +12,7 @@ book:
     - envir.qmd
     - flow.qmd
     - density.qmd 
+    - fd.qmd
     - summary.qmd
     - references.qmd
 
