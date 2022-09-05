@@ -191,4 +191,15 @@ zone2 |> plot(add = T, border = "green", lwd = 2)
 # join both zones
 zones = list(zone1, zone2)
 
+# find out the area size of each polygon
+gcs_area_sel = list()
+for (i in 1:length(zones)){
+  gcs_area_sel[[i]] = sf::st_area(zones[[i]]) 
+  # print(gcs_area_div)
+}
+# make it a vector
+gcs_area_sel = gcs_area_sel |>
+  unlist() |>
+  as.vector()
 ```
+
