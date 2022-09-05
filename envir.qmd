@@ -143,6 +143,29 @@ gcs_area_div = gcs_area_div |>
   as.vector()
 ```
 
+![](figures/envir.png)
+
+```{r, eval =F}
+gcs_env_m()
+gcs_div_sf |> plot(add = T)
+gcs_div_sf[1,] |> plot(add = T, col = "yellow")
+gcs_div_sf[2,] |> plot(add = T, col = "green")
+gcs_div_sf[3,] |> plot(add = T, col = "purple")
+text(x = 15,
+       y = 15,
+       label = "polygon 1")
+text(x = 40,
+       y = 15,
+       label = "polygon 2")
+text(x = 15,
+       y = 40,
+       label = "polygon 3")
+text(x = 40,
+       y = 40,
+       label = "polygon 4")
+```
+
+![](figures/envir_div.png)
 
 ## Selected
 
@@ -202,4 +225,19 @@ gcs_area_sel = gcs_area_sel |>
   unlist() |>
   as.vector()
 ```
+
+```{r, eval = F}
+gcs_env_m()
+zones[[1]] |> plot(add = T, col = "green")
+zones[[2]] |> plot(add = T, col = "yellow")
+text(x = 10,
+     y = 20,
+     label = "Zone 1")
+text(x = 45,
+     y = 20,
+     label = "Zone 2")
+
+```
+
+![](figures/envir_sel.png)
 
