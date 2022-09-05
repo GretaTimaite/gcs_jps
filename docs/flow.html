@@ -189,15 +189,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#global-flow-gcs" id="toc-global-flow-gcs" class="nav-link active" data-scroll-target="#global-flow-gcs"> <span class="header-section-number">3.1</span> 1. Global flow (GCS)</a>
+  <li><a href="#global-flow-gcs" id="toc-global-flow-gcs" class="nav-link active" data-scroll-target="#global-flow-gcs"> <span class="header-section-number">3.1</span> 1.1 Global flow (GCS)</a>
   <ul class="collapse">
   <li><a href="#plotting" id="toc-plotting" class="nav-link" data-scroll-target="#plotting"> <span class="header-section-number">3.1.1</span> Plotting</a></li>
   </ul></li>
-  <li><a href="#divided-flow-gcs" id="toc-divided-flow-gcs" class="nav-link" data-scroll-target="#divided-flow-gcs"> <span class="header-section-number">3.2</span> 2. Divided flow (GCS)</a>
+  <li><a href="#divided-flow-gcs" id="toc-divided-flow-gcs" class="nav-link" data-scroll-target="#divided-flow-gcs"> <span class="header-section-number">3.2</span> 2.1 Divided flow (GCS)</a>
   <ul class="collapse">
   <li><a href="#plotting-1" id="toc-plotting-1" class="nav-link" data-scroll-target="#plotting-1"> <span class="header-section-number">3.2.1</span> Plotting</a></li>
   </ul></li>
-  <li><a href="#selected-gcs" id="toc-selected-gcs" class="nav-link" data-scroll-target="#selected-gcs"> <span class="header-section-number">3.3</span> 3. Selected (GCS)</a>
+  <li><a href="#selected-gcs" id="toc-selected-gcs" class="nav-link" data-scroll-target="#selected-gcs"> <span class="header-section-number">3.3</span> 3.1 Selected (GCS)</a>
   <ul class="collapse">
   <li><a href="#plotting-2" id="toc-plotting-2" class="nav-link" data-scroll-target="#plotting-2"> <span class="header-section-number">3.3.1</span> Plotting</a></li>
   </ul></li>
@@ -205,13 +205,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul class="collapse">
   <li><a href="#plotting-3" id="toc-plotting-3" class="nav-link" data-scroll-target="#plotting-3"> <span class="header-section-number">3.4.1</span> Plotting</a></li>
   </ul></li>
-  <li><a href="#divided-flow-jps" id="toc-divided-flow-jps" class="nav-link" data-scroll-target="#divided-flow-jps"> <span class="header-section-number">3.5</span> 2. Divided flow (JPS)</a>
+  <li><a href="#divided-flow-jps" id="toc-divided-flow-jps" class="nav-link" data-scroll-target="#divided-flow-jps"> <span class="header-section-number">3.5</span> 2.2 Divided flow (JPS)</a>
   <ul class="collapse">
   <li><a href="#plotting-4" id="toc-plotting-4" class="nav-link" data-scroll-target="#plotting-4"> <span class="header-section-number">3.5.1</span> Plotting</a></li>
   </ul></li>
-  <li><a href="#selected-jps" id="toc-selected-jps" class="nav-link" data-scroll-target="#selected-jps"> <span class="header-section-number">3.6</span> 3. Selected (JPS)</a>
+  <li><a href="#selected-jps" id="toc-selected-jps" class="nav-link" data-scroll-target="#selected-jps"> <span class="header-section-number">3.6</span> 3.2 Selected (JPS)</a>
   <ul class="collapse">
   <li><a href="#plotting-5" id="toc-plotting-5" class="nav-link" data-scroll-target="#plotting-5"> <span class="header-section-number">3.6.1</span> Plotting</a></li>
+  </ul></li>
+  <li><a href="#comparison" id="toc-comparison" class="nav-link" data-scroll-target="#comparison"> <span class="header-section-number">3.7</span> Comparison</a>
+  <ul class="collapse">
+  <li><a href="#global" id="toc-global" class="nav-link" data-scroll-target="#global"> <span class="header-section-number">3.7.1</span> Global</a></li>
+  <li><a href="#divided" id="toc-divided" class="nav-link" data-scroll-target="#divided"> <span class="header-section-number">3.7.2</span> Divided</a></li>
+  <li><a href="#selected" id="toc-selected" class="nav-link" data-scroll-target="#selected"> <span class="header-section-number">3.7.3</span> Selected</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -238,7 +244,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </header>
 
 <section id="global-flow-gcs" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="global-flow-gcs"><span class="header-section-number">3.1</span> 1. Global flow (GCS)</h2>
+<h2 data-number="3.1" class="anchored" data-anchor-id="global-flow-gcs"><span class="header-section-number">3.1</span> 1.1 Global flow (GCS)</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># now let's create a new column for seconds</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 1 second = 25 frames</span></span>
@@ -260,8 +266,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gcs_flow_plot <span class="ot">=</span> ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(gcs_grouped) <span class="sc">+</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> sec,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">y =</span> n) <span class="sc">+</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_line</span>()</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>gcs_flow_plot </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We could add add additional information by adding lines indicating mean and median for seconds and number of agents, but I’m not sure it tells us much…</p>
 <div class="cell">
@@ -288,7 +293,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 </section>
 <section id="divided-flow-gcs" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="divided-flow-gcs"><span class="header-section-number">3.2</span> 2. Divided flow (GCS)</h2>
+<h2 data-number="3.2" class="anchored" data-anchor-id="divided-flow-gcs"><span class="header-section-number">3.2</span> 2.1 Divided flow (GCS)</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first create a list to store our multiple dataframes</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>gcs_joined <span class="ot">=</span> <span class="fu">list</span>()</span>
@@ -340,7 +345,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 </section>
 <section id="selected-gcs" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="selected-gcs"><span class="header-section-number">3.3</span> 3. Selected (GCS)</h2>
+<h2 data-number="3.3" class="anchored" data-anchor-id="selected-gcs"><span class="header-section-number">3.3</span> 3.1 Selected (GCS)</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a list to store our 2 dataframes for the selected areas</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>gcs_joined_zones <span class="ot">=</span> <span class="fu">list</span>()</span>
@@ -415,7 +420,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 </section>
 <section id="divided-flow-jps" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="divided-flow-jps"><span class="header-section-number">3.5</span> 2. Divided flow (JPS)</h2>
+<h2 data-number="3.5" class="anchored" data-anchor-id="divided-flow-jps"><span class="header-section-number">3.5</span> 2.2 Divided flow (JPS)</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first create a list to store our multiple dataframes</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>jps_joined <span class="ot">=</span> <span class="fu">list</span>()</span>
@@ -464,7 +469,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 </section>
 <section id="selected-jps" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="selected-jps"><span class="header-section-number">3.6</span> 3. Selected (JPS)</h2>
+<h2 data-number="3.6" class="anchored" data-anchor-id="selected-jps"><span class="header-section-number">3.6</span> 3.2 Selected (JPS)</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a list to store our 2 dataframes for the selected areas</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>jps_joined_zones <span class="ot">=</span> <span class="fu">list</span>()</span>
@@ -507,6 +512,48 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(jps_flow_zones_plots[[<span class="dv">1</span>]], jps_flow_zones_plots[[<span class="dv">2</span>]], <span class="at">layout_matrix =</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="comparison" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="comparison"><span class="header-section-number">3.7</span> Comparison</h2>
+<p>In this subsection we will overlay GCS and JPS plots to compare flows.</p>
+<section id="global" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="global"><span class="header-section-number">3.7.1</span> Global</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>flow_comp <span class="ot">=</span> ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(gcs_grouped) <span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> sec,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">y =</span> n) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(<span class="at">data =</span> jps_grouped,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="st">"red"</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>flow_comp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="divided" class="level3" data-number="3.7.2">
+<h3 data-number="3.7.2" class="anchored" data-anchor-id="divided"><span class="header-section-number">3.7.2</span> Divided</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>flow_div_comp <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(gcs_flow_div_plots)) {</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  flow_div_comp[[i]] <span class="ot">=</span> gcs_flow_div_plots[[i]] <span class="sc">+</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(<span class="at">data =</span> jps_joined_grouped[[i]],</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="st">"red"</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(flow_div_comp[[<span class="dv">1</span>]], flow_div_comp[[<span class="dv">2</span>]],flow_div_comp[[<span class="dv">3</span>]],flow_div_comp[[<span class="dv">4</span>]], <span class="at">layout_matrix =</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="selected" class="level3" data-number="3.7.3">
+<h3 data-number="3.7.3" class="anchored" data-anchor-id="selected"><span class="header-section-number">3.7.3</span> Selected</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>flow_sel_comp <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(gcs_flow_zones_plots)) {</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  flow_sel_comp[[i]] <span class="ot">=</span> gcs_flow_zones_plots[[i]] <span class="sc">+</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(<span class="at">data =</span> jps_joined_grouped_zones[[i]],</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="st">"red"</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(flow_sel_comp[[<span class="dv">1</span>]], flow_sel_comp[[<span class="dv">2</span>]], <span class="at">layout_matrix =</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
