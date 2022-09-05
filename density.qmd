@@ -115,7 +115,7 @@ gridExtra::grid.arrange(gcs_den_sel_plots[[1]], gcs_den_sel_plots[[2]], layout_m
 
 ## 2.1 Global (JPS)
 
-```{r}
+```{r, eval = F}
 # group by seconds and then measure density
 jps_d = traj1_sf |> 
   sf::st_drop_geometry() |> 
