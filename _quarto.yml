@@ -10,6 +10,7 @@ book:
     - index.qmd
     - intro.qmd
     - envir.qmd
+    - flow.qmd
     - summary.qmd
     - references.qmd
 
