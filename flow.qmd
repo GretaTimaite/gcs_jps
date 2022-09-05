@@ -294,9 +294,7 @@ flow_comp = gcs_flow_plot
                      color = "red")
 ```
 
-```{r, echo = F}
-readRDS("/Users/gretatimaite/Desktop/gcs_jps/figures/flow_comp.png")
-```
+![Global Flow](figures/flow_comp.png)
 
 
 ### Divided
@@ -312,10 +310,7 @@ for (i in 1:length(gcs_flow_div_plots)) {
 gridExtra::grid.arrange(flow_div_comp[[1]], flow_div_comp[[2]],flow_div_comp[[3]],flow_div_comp[[4]], layout_matrix = rbind(c(1,2),c(3,4)))
 ```
 
-```{r, echo = F}
-readRDS("/Users/gretatimaite/Desktop/gcs_jps/figures/flow_div_comp.png")
-```
-
+![Divided Flow](figures/flow_div_comp.png)
 
 ### Selected
 
@@ -330,10 +325,6 @@ for (i in 1:length(gcs_flow_zones_plots)) {
 gridExtra::grid.arrange(flow_sel_comp[[1]], flow_sel_comp[[2]], layout_matrix = rbind(c(1,2)))
 ```
 
-```{r, echo = F}
-readRDS("/Users/gretatimaite/Desktop/gcs_jps/figures/flow_sel_comp.png")
-
-```
-
+![Selected Flow](figures/flow_sel_comp.png)
 
 
