@@ -4,7 +4,7 @@ title: "Speed"
 
 # GCS Speed
 
-```{r}
+```{r, eval = F}
 # AIM: measure pedestrian speed
 # how: measure the distance an agent travelled from frame A to frame B, this will be indicative of how much an agent moved in one frame (0.04 sec)
 # later this can be aggregated as to estimate the distance travelled in, for instance, 1 second
