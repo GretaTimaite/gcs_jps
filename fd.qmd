@@ -153,7 +153,7 @@ We don't have dist column in our `traj1` dataframe. Thus, we will need to derive
 
 This builds on the previous chapter on density, hence density part will be skipped. Instead, let's move to finding out average speed per second.
 
-```{r}
+```{r, eval = F}
 # average speed per frame
 jps_speed1 = jps_dist_df |> 
   dplyr::mutate(sec = FR / 8) |> 
@@ -183,7 +183,7 @@ jps_speed_joined = dplyr::left_join(jps_speed, jps_d_group_sec)
 
 ## Plotting
 
-```{r}
+```{r, eval = F}
 jps_fd = ggplot2::ggplot(data = jps_speed_joined,
                 ggplot2::aes(x = density,
                             y = speed_av))+
@@ -194,7 +194,7 @@ jps_fd = ggplot2::ggplot(data = jps_speed_joined,
 
 To find out how density has been measured, see "Density" chapter.
 
-```{r}
+```{r, eval = F}
 # first create a list to store our new datasets 
 
 # turn df into an sf object
@@ -208,7 +208,7 @@ for (i in 1:lengths(gcs_div_sf)){
 
 ```
 
-```{r}
+```{r, eval = F}
 # a list with dataframes (denoting to different polygons) containing average speed of agents per frame
 jps_speed_div = list()
 for (i in 1:lengths(gcs_div_sf)){
@@ -223,7 +223,7 @@ for (i in 1:lengths(gcs_div_sf)){
 }
 ```
 
-```{r}
+```{r, eval = F}
 # join dataframes in `gcs_speed_div` and `gcs_speed_div` lists accordingly (will help when plotting)
 jps_fd_joined = list()
 for (i in 1:length(jps_fd_div)){
@@ -234,7 +234,7 @@ for (i in 1:length(jps_fd_div)){
 
 ### Plotting
 
-```{r}
+```{r, eval = F}
 jps_div_plots = list()
 for (i in 1:length(jps_fd_joined)){
   jps_div_plots[[i]] = ggplot2::ggplot(jps_fd_joined[[i]]) +
@@ -249,7 +249,7 @@ gridExtra::grid.arrange(jps_div_plots[[1]], jps_div_plots[[2]], jps_div_plots[[3
 
 ## Selected (JPS)
 
-```{r}
+```{r, eval = F}
 # first create a list to store our new datasets 
 jps_fd_sel = list()
 for (i in 1:length(zones)){
@@ -257,7 +257,7 @@ for (i in 1:length(zones)){
 }
 ```
 
-```{r}
+```{r, eval = F}
 # a list with dataframes (denoting to different polygons) containing average speed of agents per frame
 jps_speed_sel = list()
 for (i in 1:length(zones)){
@@ -272,7 +272,7 @@ for (i in 1:length(zones)){
 }
 ```
 
-```{r}
+```{r, eval = F}
 # join lists accordingly (will help when plotting)
 jps_fd_joined = list()
 for (i in 1:length(zones)){
@@ -283,7 +283,7 @@ for (i in 1:length(zones)){
 
 ### Plotting
 
-```{r}
+```{r, eval = F}
 jps_sel_plots = list()
 for (i in 1:length(jps_fd_joined)){
   jps_sel_plots[[i]] = ggplot2::ggplot(jps_fd_joined[[i]]) +
@@ -302,7 +302,7 @@ gridExtra::grid.arrange(jps_sel_plots[[1]], jps_sel_plots[[2]], layout_matrix = 
 
 # JPS Speed
 
-```{r}
+```{r, eval = F}
 # get data
 jps = read.table("/Users/gretatimaite/Desktop/pedestrian_simulation/final_results/8_frame/1/traj.txt",
                  col.names = c("ID",	"FR",	"X",	"Y",	"Z",	"A",	"B",	"ANGLE",	"COLOR"))
@@ -409,7 +409,7 @@ saveRDS(jps_dist_list,
 
 ```
 
-```{r}
+```{r, eval = F}
 # lists into a single df
 
 jps_dist_sf = as.data.frame(do.call(rbind,  jps_dist_list))
