@@ -297,8 +297,51 @@ gridExtra::grid.arrange(jps_sel_plots[[1]], jps_sel_plots[[2]], layout_matrix = 
 
 ```
 
+# Comparison
+
+## Global
+
+```{r, eval = F}
+#fd_comp = gcs_fd +
+  ggplot2::geom_point(data = jps_speed_joined,
+                      color = "red")
+```
+
+![](figures/fd_comp.png)    
+## Divided
+
+```{r, eval = F}
+fd_div_comp = list()
+for (i in 1:length(gcs_fd_div)) {
+  fd_div_comp[[i]] = gcs_div_plots[[i]] + 
+  ggplot2::geom_point(data = jps_fd_joined[[i]],
+                     color = "red")
+}
+
+gridExtra::grid.arrange(fd_div_comp[[1]], fd_div_comp[[2]], fd_div_comp[[3]], fd_div_comp[[4]], layout_matrix = rbind(c(1,2),c(3,4)))
+```
+
+![](figures/df_div_comp.png)
+
+## Selected
+
+```{r, eval = F}
+gcs_fd_div_plots+
+  ggplot2::geom_point(data = jps_fd_joined,
+                      color = "red")
 
 
+fd_sel_comp = list()
+for (i in 1:length(gcs_fd_div_plots)) {
+  fd_sel_comp[[i]] = gcs_fd_div_plots[[i]] + 
+  ggplot2::geom_point(data = jps_fd_joined[[i]],
+                     color = "red")
+}
+
+gridExtra::grid.arrange(fd_sel_comp[[1]], fd_sel_comp[[2]], layout_matrix = rbind(c(1,2),c(3,4)))
+```
+
+![](figures/fd_sel_comp.png)
 
 # JPS Speed
 
@@ -420,8 +463,8 @@ jps_dist_df = jps_dist_sf  |>
   dplyr::select(-geometry)
 
 # save as csv
-write.csv(jps_dist_df,
-          "jps_dist_df")
+# write.csv(jps_dist_df,
+#           "jps_dist_df")
 
 jps_dist_df_test = read.csv("jps_dist_df")
 ```
