@@ -4,12 +4,12 @@ title: "Voronoi"
 
 In this chapter we will plot voronoi densities and comapre them with "regular" densities of GCS and JPS.
 
-```{r}
+```{r, eval = F}
 deldir_pol = readRDS("/Users/gretatimaite/Desktop/pedestrian_simulation/deldir_pol.RDS")
 
 ```
 
-```{r}
+```{r, eval = F}
 # first let's "borrow" some density code from the previous chaper
 
 matrix_walls = matrix(c(0,0,0,50*14,53*14,50*14,53*14, 0,0,0),
@@ -28,7 +28,7 @@ gcs_div_sf = gcs_div |>
   dplyr::rename(geom = x)
 ```
 
-```{r}
+```{r, eval = F}
 # function 
 
 gcs_deldir_fun = function(gcs = list(),
@@ -38,7 +38,7 @@ gcs_deldir_fun = function(gcs = list(),
 }
 ```
 
-```{r}
+```{r, eval = F}
 gcs_deldir1 = list()
 gcs_deldir2 = list()
 gcs_deldir3 = list()
@@ -58,7 +58,7 @@ gcs_deldir4 = list()
   }
 ```
 
-```{r}
+```{r, eva; = F}
 # Now let's figure out how many tiles are in each polygon
 # number of tiles (rows) in each dataframe in gcs_deldir indicates the number of agents
 # this number will be divided by the estimates area of a polygon
@@ -75,7 +75,7 @@ gcs_area = gcs_area |>
   as.vector()
 ```
 
-```{r}
+```{r, eval = F}
 # plot 1
 voronoi_density1_temp = vector()
 voronoi_density1 = data.frame()
