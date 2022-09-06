@@ -58,7 +58,7 @@ gcs_deldir4 = list()
   }
 ```
 
-```{r, eva; = F}
+```{r, eval = F}
 # Now let's figure out how many tiles are in each polygon
 # number of tiles (rows) in each dataframe in gcs_deldir indicates the number of agents
 # this number will be divided by the estimates area of a polygon
