@@ -1,5 +1,15 @@
 # Flow 
 
+Flow is one of the basic measures to quantify pedestrian dynamics (Steffen and Seyfried, 2010). 
+
+Flow is measured by counting the heads that pass through a line, e.g. doors, within a given time interval.
+
+In this chapter we will find out three types of flow in Grand Central Station (GCS) and JuPedSim (JPS) model:
+
+1. Global, or the entire environment, flow
+2. Divided flow, which refers to the environment being divided into four equal polygons and measuring flow in each
+3. Selected flow refers to two manually defined areas -- Zone 1 and Zone 2. Zone 1 has the density that is similar to that of the entire environment and Zone 2 has the highest density in the environment. For more information see chapter "Environment".
+
 ## 1.1 Global flow (GCS)
 
 ```{r, eval = F}
