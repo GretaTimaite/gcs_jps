@@ -1,4 +1,6 @@
-# Flow 
+---
+title: "Flow"
+---
 
 Flow is one of the basic measures to quantify pedestrian dynamics (Steffen and Seyfried, 2010). 
 
