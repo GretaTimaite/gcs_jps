@@ -10,17 +10,17 @@ Density = N/Area
 
 Speed(av) = sum(agent distance per frame)/N
 
-N -> number of agents
+N = number of agents
 
-Area -> an area in which agents are counted
+Area = an area in which agents are counted
+
+It should be noted that fundamental diagrams may be slightly influenced by different measurement methods (Zhang et al., 2011). However, the aim of this chapter is not to compare different methods but rather understand the extent to which simulated (JPS) data reflects real-life GCS data. Therefore, the focus in this chapter is on classical density and average speed.
 
 Note 1: GCS has distance/speed per frame data. You can find out how it was acquired following this R script: https://github.com/GretaTimaite/pedestrian_simulation/blob/main/gcs_speed.R
 
-Note 2: JPS does not have this information, so it will be done in this chapter.
-
 ## 1.1 Global (GCS)
 
-This builds on the previous chapter on density, hence density part will be skipped. Instead, let's move to finding out average speed per second.
+This builds on the previous chapter on density, hence density part will be skipped. Instead, let's move to finding out average speed per frame.
 
 ```{r, eval = F}
 # average speed per frame
