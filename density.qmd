@@ -229,6 +229,7 @@ density_comp = gcs_density +
 ```
 
 ![](figures/density_comp.png)
+
 ```{r, eval = F}
 print("GCS mean density value")
 gcs_d |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean()
@@ -242,12 +243,16 @@ jps_d |> dplyr::group_by(sec) |> dplyr::pull(density) |> median()
 
 ```
 
+
 [1] "GCS mean density value"
 [1] 0.02354127
+
 [1] "JPS mean density value"
 [1] 0.04464389
+
 [1] "GCS median density value"
 [1] 0.02566038
+
 [1] "JPS median density value"
 [1] 0.04566038
 
@@ -267,7 +272,7 @@ gridExtra::grid.arrange(density_div_comp[[1]], density_div_comp[[2]], density_di
 
 ![](figures/density_div_comp_plot.png)
 
-## Selected
+### Selected
 
 ```{r, eval = F}
 flow_sel_comp = list()
@@ -283,7 +288,12 @@ gridExtra::grid.arrange(flow_sel_comp[[1]], flow_sel_comp[[2]], layout_matrix = 
 
 ![](figures/density_sel_comp_plot.png)
 
-ß
+# Discussion
 
+Since, as mentioned in the introduction of this chapter, flow and density measures are similar, I will not discuss the potential reasons of different densities. Instead, I'd like to note that even in JPS model, which shows higher agent density compared to GCS, the actual density is still relatively low. For instance, in Zone 2 the density is, mostly, below 0.1 person/m2. 
+
+Low density, we may assume, does not create conditions for congestion, which is often a subject in the literature of pedestrian dynamics. Therefore, neither in GCS nor in JPS models agents are expected to slow down as the density increases because it does not become dense enough as to cause crowding.
+
+To explore the relationship between density and speed, we will plot fundamental diagrams in the next chapter.
 
 
