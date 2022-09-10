@@ -1,8 +1,8 @@
 ---
-title: "Exploring the efficacy of different methods for comparing pedestrian simulations against empirical data"
+title: "Project Summary"
 ---
 
-### Project Summary
+### Exploring the efficacy of different methods for comparing pedestrian simulations against empirical data
 
 Agent-based models (ABMs) have become one of the main modelling tools helping to understand the contemporary challenges of human movement within cities (Crooks et al. 2021). ABMs are used to simulate real systems by creating artificial scenarios in contexts ranging from disease and epidemiology to traffic and pedestrian simulation (Torrens 2010). ABM simulations can be used to assess, for instance, new traffic interventions before they are implemented (Crooks et al. 2021). Furthermore, the uptake of ABMs has largely been informed by the increasing availability of data (Crooks et al. 2021), yet it remains a challenge to evaluate the accuracy of models because of various uncertainties, such as missing data and inherent randomness (Kieu et al. 2020).
 
