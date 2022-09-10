@@ -1,9 +1,35 @@
-# Preface {.unnumbered}
+---
+Title: "Exploring the efficacy of different methods for comparing pedestrian simulations against empirical data"
+---
 
-This is a Quarto book.
+Agent-based models (ABMs) have become one of the main modelling tools helping to understand the contemporary challenges of human movement within cities (Crooks et al. 2021). ABMs are used to simulate real systems by creating artificial scenarios in contexts ranging from disease and epidemiology to traffic and pedestrian simulation (Torrens 2010). ABM simulations can be used to assess, for instance, new traffic interventions before they are implemented (Crooks et al. 2021). Furthermore, the uptake of ABMs has largely been informed by the increasing availability of data (Crooks et al. 2021), yet it remains a challenge to evaluate the accuracy of models because of various uncertainties, such as missing data and inherent randomness (Kieu et al. 2020).
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+This project aims to address the issue of uncertainty by investigating the impact of using different methods to evaluate the reliability of agent-based models. In other words, (some) uncertainties will be identified, quantified, and handled in a way that can help to enhance the understanding of a model's quality and usefulness. The project objectives are:
 
-```{r}
-1 + 1
-```
+1.  Produce a review and analysis of existing data on pedestrian movement within crowded corridors and within a train station concourse.
+2.  Simulate the movements of pedestrians in these environments.
+3.  Assess the difference between the simulations and the data using a variety of new and existing methods.
+
+The project focus is on pedestrian models, however it is expected that the developed methods will be applicable to any agent-based modelling, such as consumer behaviour in shopping. To support the reproducibility of results, open-source code and documentation will be produced in partnership with the Alan Turing Institute, which also funds the project as part of a wider collaboration entitled "Understanding and Quantifying Uncertainty in Agent-Based Models for Smart City Forecasts".
+
+Project team
+
+Greta Timaite, Leeds Institute for Data Analytics, University of Leeds
+
+Dr Josie McCulloch, School of Geography, University of Leeds
+
+Professor Nick Malleson, School of Geography, University of Leeds
+
+Professor Alison Heppenstall, School of Geography, University of Leeds
+
+Dr Jon Ward, School of Mathematics, University of Leeds
+
+Dr Jiaqi Ge, School of Geography, University of Leeds
+
+### Bibliography
+
+Andrew Crooks, Alison Heppenstall, Nick Malleson, and Ed Manley. 2021. "Agent-Based Modeling and the City: A Gallery of Applications." In Urban Informatics, edited by Wenzhong Shi, Michael F. Goodchild, Michael Batty, Mei-Po Kwan, and Anshu Zhang, 885--910. The Urban Book Series. Singapore: Springer. https://doi.org/10.1007/978-981-15-8983-6_46.
+
+Le-Minh Kieu, Nicolas Malleson, and Alison Heppenstall. 2020. "Dealing with Uncertainty in Agent-Based Models for Short-Term Predictions." Royal Society Open Science 7 (1). https://doi.org/10.1098/rsos.191074.
+
+Paul M Torrens. 2010. "Agent-Based Models and the Spatial Sciences." Geography Compass 4 (5): 428--48. https://doi.org/10.1111/j.1749-8198.2009.00311.x.
