@@ -336,5 +336,10 @@ gridExtra::grid.arrange(flow_sel_comp[[1]], flow_sel_comp[[2]], layout_matrix = 
 ```
 
 ![Selected Flow](figures/flow_sel_comp.png)
+## Discussion
 
+JPS model (simulated data) has higher flow rate compared to GCS (real data) in all plots. A potential reason for this is that in the JPS model new agents are "injected" into the environement at defined periods of time, which might not be representative of the actual pedestrian dynamics in the concourse. In other words, it is likely that in the real life pedestrians enter and exit the environment based on the train schedule, thus ensuring more or less stable in and out-flow rates. This might not be captured in the model, thus resulting in a peak that is not present in the GCS data.
+
+
+Importantly, however, we can see that in the plots representing the flow in the selected areas (Zone 1 and 2) the rate is what was expected: Zone 1 is has lower agent flow compared to Zone 2. In this respect the JPS model seems pretty well calibrated even if, in tota, it has higher flow rate.
 
