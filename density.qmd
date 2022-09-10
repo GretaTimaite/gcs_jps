@@ -2,9 +2,20 @@
 title: "Density"
 ---
 
+Density measure is similar to flow, but instead of countin the number of agents passing through, for instance, gates, persons per area are measured. Thus, its function is:
+
 Density = N / m2
 
 N = number of agents
+
+Steffen and Seyfried (2010) identify two issues with this density measure:
+
+1. "in" and "out" of an agent has to be assigned arbitrarily (p. 1903)
+2. density is dependent on time and placement of a measure area, which might result in "jumps for small area." (p. 1903)
+
+To address these issues, authors suggest implementing Voronoi diagrams. This will be done in the "Voronoi" chapter of this report.
+
+Before moving on, I assume that density plots will resemble flow plots as both of them rely on the number of agents passing through a given area/line, but in density measure the flow rate is divided by an area (m2) of a measured area. Theoretically, if an area is 1m2x1m2 then the flow and density plots would overlap.
 
 ## 1.1 Global (GCS)
 
@@ -218,6 +229,27 @@ density_comp = gcs_density +
 ```
 
 ![](figures/density_comp.png)
+```{r, eval = F}
+print("GCS mean density value")
+gcs_d |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean()
+print("JPS mean density value")
+jps_d |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean()
+
+print("GCS median density value")
+gcs_d |> dplyr::group_by(sec) |> dplyr::pull(density) |> median()
+print("JPS median density value")
+jps_d |> dplyr::group_by(sec) |> dplyr::pull(density) |> median()
+
+```
+
+[1] "GCS mean density value"
+[1] 0.02354127
+[1] "JPS mean density value"
+[1] 0.04464389
+[1] "GCS median density value"
+[1] 0.02566038
+[1] "JPS median density value"
+[1] 0.04566038
 
 
 ### Divided
@@ -251,8 +283,7 @@ gridExtra::grid.arrange(flow_sel_comp[[1]], flow_sel_comp[[2]], layout_matrix = 
 
 ![](figures/density_sel_comp_plot.png)
 
-
-
+ß
 
 
 
