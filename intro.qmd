@@ -1,5 +1,13 @@
 # Getting data
 
+GCS data was cleaned by Patricia Ternes. It was downloaded from [here](https://github.com/Urban-Analytics/dust/tree/main/Projects/ABM_DA/experiments/grand_central_terminal_data/GCT_final_real_data). However, the data was not in a friendly format (multiple .dar files sorted by frame), thus I further manipulated and transformed the data into a .csv format. Final GCS data used throughout this project can be downloaded from the [releases](https://github.com/GretaTimaite/pedestrian_simulation/releases/download/data/frames_final.csv).
+
+In this chapter I do not demonstrate the CGS data transformation from .dat to a .csv file. Yet, the script for it (including extensive documentation) can be found in the ["read_frames.R" script](https://github.com/GretaTimaite/pedestrian_simulation/blob/main/read_frames.R).
+
+JPS produces .txt files that can be easily read into R. It did not require any pre-processing before reading it into R.
+
+Also, both JPS and GCS datasets are transformed into `sf` objects to make spatial manipulation possible (and much easier!).
+
 ```{r, eval = F}
 # trajectory data
 traj1 = read.table("/Users/gretatimaite/Desktop/pedestrian_simulation/final_results/8_frame/1/traj.txt",
