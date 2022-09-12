@@ -232,8 +232,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#comparison" id="toc-comparison" class="nav-link" data-scroll-target="#comparison"> <span class="header-section-number">8</span> Comparison</a>
   <ul class="collapse">
   <li><a href="#global" id="toc-global" class="nav-link" data-scroll-target="#global"> <span class="header-section-number">8.1</span> Global</a></li>
-  <li><a href="#selected" id="toc-selected" class="nav-link" data-scroll-target="#selected"> <span class="header-section-number">8.2</span> Selected</a></li>
-  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"> <span class="header-section-number">8.3</span> Discussion</a></li>
+  <li><a href="#divided" id="toc-divided" class="nav-link" data-scroll-target="#divided"> <span class="header-section-number">8.2</span> Divided</a></li>
+  <li><a href="#selected" id="toc-selected" class="nav-link" data-scroll-target="#selected"> <span class="header-section-number">8.3</span> Selected</a></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"> <span class="header-section-number">8.4</span> Discussion</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -537,8 +538,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_point</span>(<span class="at">data =</span> jps_speed_joined,</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><img src="figures/fd_comp.png" class="img-fluid"><br>
-## Divided</p>
+<p><img src="figures/fd_comp.png" class="img-fluid"></p>
+</section>
+<section id="divided" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="divided"><span class="header-section-number">8.2</span> Divided</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>fd_div_comp <span class="ot">=</span> <span class="fu">list</span>()</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(gcs_fd_div)) {</span>
@@ -551,8 +554,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p><img src="figures/df_div_comp.png" class="img-fluid"></p>
 </section>
-<section id="selected" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="selected"><span class="header-section-number">8.2</span> Selected</h2>
+<section id="selected" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="selected"><span class="header-section-number">8.3</span> Selected</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>gcs_fd_div_plots<span class="sc">+</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_point</span>(<span class="at">data =</span> jps_fd_joined,</span>
@@ -570,11 +573,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p><img src="figures/fd_sel_comp.png" class="img-fluid"></p>
 </section>
-<section id="discussion" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="discussion"><span class="header-section-number">8.3</span> Discussion</h2>
+<section id="discussion" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="discussion"><span class="header-section-number">8.4</span> Discussion</h2>
 <p>Fundamental diagrams do not show the expected negative slope – the increase in density does not lead to a decreased speed. Indeed, a reverse pattern can be seen in all GCS plots. Arguably, this is a case because in all areas the density remains low enough not to reduce agent speed. An increase in average speed and density might be a result of a new agent entering the area that walks fast, thus boosting the av.speed and density (a little bit!).</p>
 <p>In case of JPS, we can observe a steady relationship between speed and density. Again, it is likely that the environment does not become crowded enough to force agents to stop and slow down. Moreover, in the JPS agent speed is set (i.e.&nbsp;is constant), thus reducing the variance of agent speeds. This, however, does not represent the actual pedestrian dynamics in the GCS in which pedestrians might randomly stop to check, for instance, their phones or speed up or slow down depending on their individual circumstances (e.g.&nbsp;how much time is left before train departure).</p>
-<p>Also, in this example I relied on classical density measure but there are other ways to measure it. For example, Duives et al.&nbsp;(2015) discuss 7 measures for quantifying pedestrian crowdedness in which Voronoi and X-T measures are considered “the best”. It could be useful to explore different methods to confirm (or not) that the negative slope remains in GCS and the current JPS models.</p>
+<p>Also, in this example I relied on classical density measure but there are other ways to measure it. For example, <a href="https://www.sciencedirect.com/science/article/pii/S037843711200667X">Duives et al.&nbsp;(2015)</a> discuss 7 measures for quantifying pedestrian crowdedness in which Voronoi and X-T measures are considered “the best”. It could be useful to explore different methods to confirm (or not) that the negative slope remains in GCS and the current JPS models.</p>
 <p>Finally, it could be interesting to experiment with different agent numbers in JPS to explore when/how congestion occurs, thus leading to the expected outcome – as density increases, speed/velocity decreases.</p>
 
 

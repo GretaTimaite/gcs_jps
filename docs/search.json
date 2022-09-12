@@ -228,14 +228,14 @@
     "href": "fd.html#global",
     "title": "7  Fundamental diagrams",
     "section": "8.1 Global",
-    "text": "8.1 Global\n\n#fd_comp = gcs_fd +\n  ggplot2::geom_point(data = jps_speed_joined,\n                      color = \"red\")\n\n\n## Divided\n\nfd_div_comp = list()\nfor (i in 1:length(gcs_fd_div)) {\n  fd_div_comp[[i]] = gcs_div_plots[[i]] + \n  ggplot2::geom_point(data = jps_fd_joined[[i]],\n                     color = \"red\")\n}\n\ngridExtra::grid.arrange(fd_div_comp[[1]], fd_div_comp[[2]], fd_div_comp[[3]], fd_div_comp[[4]], layout_matrix = rbind(c(1,2),c(3,4)))"
+    "text": "8.1 Global\n\n#fd_comp = gcs_fd +\n  ggplot2::geom_point(data = jps_speed_joined,\n                      color = \"red\")"
   },
   {
     "objectID": "fd.html#selected",
     "href": "fd.html#selected",
     "title": "7  Fundamental diagrams",
-    "section": "8.2 Selected",
-    "text": "8.2 Selected\n\ngcs_fd_div_plots+\n  ggplot2::geom_point(data = jps_fd_joined,\n                      color = \"red\")\n\n\nfd_sel_comp = list()\nfor (i in 1:length(gcs_fd_div_plots)) {\n  fd_sel_comp[[i]] = gcs_fd_div_plots[[i]] + \n  ggplot2::geom_point(data = jps_fd_joined[[i]],\n                     color = \"red\")\n}\n\ngridExtra::grid.arrange(fd_sel_comp[[1]], fd_sel_comp[[2]], layout_matrix = rbind(c(1,2),c(3,4)))"
+    "section": "8.3 Selected",
+    "text": "8.3 Selected\n\ngcs_fd_div_plots+\n  ggplot2::geom_point(data = jps_fd_joined,\n                      color = \"red\")\n\n\nfd_sel_comp = list()\nfor (i in 1:length(gcs_fd_div_plots)) {\n  fd_sel_comp[[i]] = gcs_fd_div_plots[[i]] + \n  ggplot2::geom_point(data = jps_fd_joined[[i]],\n                     color = \"red\")\n}\n\ngridExtra::grid.arrange(fd_sel_comp[[1]], fd_sel_comp[[2]], layout_matrix = rbind(c(1,2),c(3,4)))"
   },
   {
     "objectID": "speed.html",
@@ -262,7 +262,14 @@
     "objectID": "fd.html#discussion",
     "href": "fd.html#discussion",
     "title": "7  Fundamental diagrams",
-    "section": "8.3 Discussion",
-    "text": "8.3 Discussion\nFundamental diagrams do not show the expected negative slope – the increase in density does not lead to a decreased speed. Indeed, a reverse pattern can be seen in all GCS plots. Arguably, this is a case because in all areas the density remains low enough not to reduce agent speed. An increase in average speed and density might be a result of a new agent entering the area that walks fast, thus boosting the av.speed and density (a little bit!).\nIn case of JPS, we can observe a steady relationship between speed and density. Again, it is likely that the environment does not become crowded enough to force agents to stop and slow down. Moreover, in the JPS agent speed is set (i.e. is constant), thus reducing the variance of agent speeds. This, however, does not represent the actual pedestrian dynamics in the GCS in which pedestrians might randomly stop to check, for instance, their phones or speed up or slow down depending on their individual circumstances (e.g. how much time is left before train departure).\nAlso, in this example I relied on classical density measure but there are other ways to measure it. For example, Duives et al. (2015) discuss 7 measures for quantifying pedestrian crowdedness in which Voronoi and X-T measures are considered “the best”. It could be useful to explore different methods to confirm (or not) that the negative slope remains in GCS and the current JPS models.\nFinally, it could be interesting to experiment with different agent numbers in JPS to explore when/how congestion occurs, thus leading to the expected outcome – as density increases, speed/velocity decreases."
+    "section": "8.4 Discussion",
+    "text": "8.4 Discussion\nFundamental diagrams do not show the expected negative slope – the increase in density does not lead to a decreased speed. Indeed, a reverse pattern can be seen in all GCS plots. Arguably, this is a case because in all areas the density remains low enough not to reduce agent speed. An increase in average speed and density might be a result of a new agent entering the area that walks fast, thus boosting the av.speed and density (a little bit!).\nIn case of JPS, we can observe a steady relationship between speed and density. Again, it is likely that the environment does not become crowded enough to force agents to stop and slow down. Moreover, in the JPS agent speed is set (i.e. is constant), thus reducing the variance of agent speeds. This, however, does not represent the actual pedestrian dynamics in the GCS in which pedestrians might randomly stop to check, for instance, their phones or speed up or slow down depending on their individual circumstances (e.g. how much time is left before train departure).\nAlso, in this example I relied on classical density measure but there are other ways to measure it. For example, Duives et al. (2015) discuss 7 measures for quantifying pedestrian crowdedness in which Voronoi and X-T measures are considered “the best”. It could be useful to explore different methods to confirm (or not) that the negative slope remains in GCS and the current JPS models.\nFinally, it could be interesting to experiment with different agent numbers in JPS to explore when/how congestion occurs, thus leading to the expected outcome – as density increases, speed/velocity decreases."
+  },
+  {
+    "objectID": "fd.html#divided",
+    "href": "fd.html#divided",
+    "title": "7  Fundamental diagrams",
+    "section": "8.2 Divided",
+    "text": "8.2 Divided\n\nfd_div_comp = list()\nfor (i in 1:length(gcs_fd_div)) {\n  fd_div_comp[[i]] = gcs_div_plots[[i]] + \n  ggplot2::geom_point(data = jps_fd_joined[[i]],\n                     color = \"red\")\n}\n\ngridExtra::grid.arrange(fd_div_comp[[1]], fd_div_comp[[2]], fd_div_comp[[3]], fd_div_comp[[4]], layout_matrix = rbind(c(1,2),c(3,4)))"
   }
 ]
