@@ -312,6 +312,7 @@ gridExtra::grid.arrange(jps_sel_plots[[1]], jps_sel_plots[[2]], layout_matrix = 
 ```
 
 ![](figures/fd_comp.png)    
+
 ## Divided
 
 ```{r, eval = F}
