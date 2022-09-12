@@ -234,8 +234,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#global" id="toc-global" class="nav-link" data-scroll-target="#global"> <span class="header-section-number">8.1</span> Global</a></li>
   <li><a href="#divided" id="toc-divided" class="nav-link" data-scroll-target="#divided"> <span class="header-section-number">8.2</span> Divided</a></li>
   <li><a href="#selected" id="toc-selected" class="nav-link" data-scroll-target="#selected"> <span class="header-section-number">8.3</span> Selected</a></li>
-  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"> <span class="header-section-number">8.4</span> Discussion</a></li>
   </ul></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"> <span class="header-section-number">9</span> Discussion</a></li>
   </ul>
 </nav>
     </div>
@@ -573,15 +573,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p><img src="figures/fd_sel_comp.png" class="img-fluid"></p>
 </section>
-<section id="discussion" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="discussion"><span class="header-section-number">8.4</span> Discussion</h2>
+</section>
+<section id="discussion" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Discussion</h1>
 <p>Fundamental diagrams do not show the expected negative slope – the increase in density does not lead to a decreased speed. Indeed, a reverse pattern can be seen in all GCS plots. Arguably, this is a case because in all areas the density remains low enough not to reduce agent speed. An increase in average speed and density might be a result of a new agent entering the area that walks fast, thus boosting the av.speed and density (a little bit!).</p>
 <p>In case of JPS, we can observe a steady relationship between speed and density. Again, it is likely that the environment does not become crowded enough to force agents to stop and slow down. Moreover, in the JPS agent speed is set (i.e.&nbsp;is constant), thus reducing the variance of agent speeds. This, however, does not represent the actual pedestrian dynamics in the GCS in which pedestrians might randomly stop to check, for instance, their phones or speed up or slow down depending on their individual circumstances (e.g.&nbsp;how much time is left before train departure).</p>
 <p>Also, in this example I relied on classical density measure but there are other ways to measure it. For example, <a href="https://www.sciencedirect.com/science/article/pii/S037843711200667X">Duives et al.&nbsp;(2015)</a> discuss 7 measures for quantifying pedestrian crowdedness in which Voronoi and X-T measures are considered “the best”. It could be useful to explore different methods to confirm (or not) that the negative slope remains in GCS and the current JPS models.</p>
 <p>Finally, it could be interesting to experiment with different agent numbers in JPS to explore when/how congestion occurs, thus leading to the expected outcome – as density increases, speed/velocity decreases.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
