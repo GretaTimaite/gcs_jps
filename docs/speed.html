@@ -152,7 +152,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Bibliography</span></a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Project Summary</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -235,125 +235,125 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
+<p>This chapter demonstrates <strong>how to derive agent speed per frame</strong> (which later can be aggregated into seconds, if needed) from either GCS or JPS data.</p>
+<p>The idea is the following: measure the distance an agent travelled from frame 1 to frame 2. This will be indicative of how much an agent moved in one frame (0.04 sec)</p>
+<p>It <strong>produces a new dataset</strong> with a new “dist” column which is equivalent to agent’s speed per frame. The output of this is used to plot fundamental diagrams (speed~density).</p>
+<p>Potential enchancements:</p>
+<ol type="1">
+<li>write a function that allows to specify interval at which to estimate travelled distance. For example, it could be for every frame (ie from frame 1 to frame 2) or every 25 frames (ie from frame 1 to frame 25). The second would simplify the trajectory but not much detail should be lost.</li>
+</ol>
 <section id="gcs-speed" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> GCS Speed</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># AIM: measure pedestrian speed</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># how: measure the distance an agent travelled from frame A to frame B, this will be indicative of how much an agent moved in one frame (0.04 sec)</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># later this can be aggregated as to estimate the distance travelled in, for instance, 1 second</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># enchancement: write a function that allows to specify interval at which to estimate travelled distance. For example, it could be for every frame</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (ie from frame 1 to frame 2) or every 25 frames (ie from frame 1 to frame 25). The second would simplify the trajectory but not much detail should be lost </span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># as there's as much an agent can travel in one second. </span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># get data</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>frames_sf <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="st">"https://github.com/GretaTimaite/pedestrian_simulation/releases/download/data/gcs_frames.geojson"</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># our geometry column is in pixels rather than meters, so let's convert it to metres</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>frames_sf <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="st">"https://github.com/GretaTimaite/pedestrian_simulation/releases/download/data/gcs_frames.geojson"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># our geometry column is in pixels rather than meters, so let's convert it to metres</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>frames_sf_m <span class="ot">=</span> frames_sf <span class="sc">|&gt;</span> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">geometry =</span> geometry <span class="sc">/</span> <span class="dv">14</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">## now we'll create a list of dataframes for each agent</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># first, let's find out the number of unique agents as this will be the number of dataframes in the list</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>unique_ids <span class="ot">=</span> frames_sf_m <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(ID) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">sort</span>()</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>frames_sf_m <span class="ot">=</span> frames_sf <span class="sc">|&gt;</span> </span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">geometry =</span> geometry <span class="sc">/</span> <span class="dv">14</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="do">## now we'll create a list of dataframes for each agent</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># first, let's find out the number of unique agents as this will be the number of dataframes in the list</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>unique_ids <span class="ot">=</span> frames_sf_m <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(ID) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">sort</span>()</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># create an empty list to store DFs</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>agent_list <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co"># create a loop</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(unique_ids)){</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  agent_list[[i]] <span class="ot">=</span> frames_sf_m <span class="sc">|&gt;</span> <span class="co"># iterate through frames_sf</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(ID <span class="sc">%in%</span> unique_ids[i]) <span class="co"># filter frames_sf by a unique ID</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="do">## sanity check</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(agent_list[[<span class="dv">30</span>]],</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>          frames_sf_m <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(ID <span class="sc">%in%</span> unique_ids[<span class="dv">30</span>]))</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co"># &gt;TRUE</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="do">## Now we will create a matrix of distances for each frame of a given agent. </span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co"># It will be used later in a function to extract the distances sequentially (from frame 1 to frame 2 to frame 3, etc)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># create an empty list to store DFs</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>agent_list <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># create a loop</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(unique_ids)){</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  agent_list[[i]] <span class="ot">=</span> frames_sf_m <span class="sc">|&gt;</span> <span class="co"># iterate through frames_sf</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(ID <span class="sc">%in%</span> unique_ids[i]) <span class="co"># filter frames_sf by a unique ID</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="do">## sanity check</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(agent_list[[<span class="dv">30</span>]],</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>          frames_sf_m <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(ID <span class="sc">%in%</span> unique_ids[<span class="dv">30</span>]))</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># &gt;TRUE</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="do">## Now we will create a matrix of distances for each frame of a given agent. </span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># It will be used later in a function to extract the distances sequentially (from frame 1 to frame 2 to frame 3, etc)</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>distance_matrix_list <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co"># system.time( # to measure how long it takes to run </span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(agent_list)){</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  distance_matrix_list[[i]] <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_distance</span>(agent_list[[i]])</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>distance_matrix_list <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co"># system.time( # to measure how long it takes to run </span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(agent_list)){</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  distance_matrix_list[[i]] <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_distance</span>(agent_list[[i]])</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co"># create a function that accepts a list of matrices</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>dist_function <span class="ot">=</span> <span class="cf">function</span>(<span class="at">list_matrix =</span> <span class="fu">list</span>()){ <span class="co"># accepts lists</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  dist_list <span class="ot">=</span> <span class="fu">list</span>() <span class="co"># empty list to store new lists</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(list_matrix)){ <span class="co"># reiteration over the length of a list</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    k <span class="ot">=</span> i <span class="co"># initialisation of a matrix row</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    j <span class="ot">=</span> k <span class="sc">+</span> <span class="dv">1</span>  <span class="co"># initialisation of a matrix column, it needs to be + 1 compared to the row as otherwise we will get distance equal to 0 </span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="co"># (there's no distance traveled from, e.g. frame 2 to frame 2)</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (j <span class="sc">&lt;=</span> <span class="fu">ncol</span>(list_matrix)){ <span class="co"># columns should not exceed the number of columns of a matrix (looping (out of bounds) error might be given otherwise)</span></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>      dist_list[[i]] <span class="ot">=</span> list_matrix[k,j] <span class="co"># for each `i` list extract matrix values at row k and column j </span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> {</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span> <span class="co"># break if j is above number of columns of a matrix</span></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dist_list)</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="co"># an empty list for distance vectors</span></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>distance_list <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="co"># loop over `distance_matrix_list` and apply a `dist_function()`</span></span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="co"># system.time( # to measure how long it takes to run </span></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(distance_matrix_list)){</span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>  distance_list[[i]] <span class="ot">=</span> distance_matrix_list[[i]] <span class="sc">|&gt;</span> </span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dist_function</span>() <span class="sc">|&gt;</span> <span class="co"># apply the new function</span></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unlist</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.data.frame</span>() <span class="co"># create a dataframe (will be useful in later steps)</span></span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(distance_list[[i]]) <span class="ot">=</span> <span class="st">"dist"</span> <span class="co"># rename a column</span></span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: each list is shorter by 1 element compared to the original input list because of initialisation starting at 1, thus capturing the distance between frame 1 and 2. </span></span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="co"># In other words, the function omits the starting point at which an agent.</span></span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="do">## testing</span></span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="co"># here we'll check that the function works as it should.</span></span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>distance_list[[<span class="dv">5</span>]][<span class="dv">1</span>] <span class="co"># agent 5's traveled distance from frame 1 to 2</span></span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.1474067</span></span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="co"># finding distance manually</span></span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_distance</span>(agent_list[[<span class="dv">5</span>]][<span class="dv">1</span>,<span class="dv">3</span>], <span class="co"># frame 1 of agent 5</span></span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>                agent_list[[<span class="dv">5</span>]][<span class="dv">2</span>,<span class="dv">3</span>]) <span class="co"># frame 2 of agent 5</span></span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 0.1474067</span></span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>distance_matrix_list[[<span class="dv">5</span>]][<span class="dv">2</span>,<span class="dv">1</span>] <span class="co"># second row in matrix 1 ([1,1] would return 0 as there's the distance from frame 1 to frame 1 equals to 0) of agent 5.</span></span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.1474067</span></span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="do">## it's time to join distance_list to agents_list</span></span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: our lists are of unequal row lengths, hence we will have to do two intermediate steps</span></span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="co"># first let's create a list to store joined lists</span></span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>agent_dist_list <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="co"># a list to store values of a shorter (intermediate) list of dataframes</span></span>
-<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>dist_list_new <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="co"># create a loop</span></span>
-<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="co"># first we will create an intermediate list of dataframes</span></span>
-<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(agent_list)){</span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>  dist_list_new[[i]] <span class="ot">=</span> <span class="fu">rbind</span>(<span class="fu">data.frame</span>(<span class="st">"dist"</span> <span class="ot">=</span> <span class="dv">0</span>),</span>
-<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>                             distance_list[[i]]) <span class="co"># adding a new row on top of the dataframes in the distance_list, </span></span>
-<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>  <span class="co"># so their length matches the length of DFs in the agent_list</span></span>
-<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>  agent_dist_list[[i]] <span class="ot">=</span> <span class="fu">cbind</span>(agent_list[[i]],</span>
-<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>                               dist_list_new[[i]]) <span class="co"># joining dataframes by column</span></span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>agent_dist_list[[<span class="dv">1</span>]]</span>
-<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="co"># looks good, we have 220 rows and the first one has a distance column equal to 0 (ie starting point)</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co"># create a function that accepts a list of matrices</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>dist_function <span class="ot">=</span> <span class="cf">function</span>(<span class="at">list_matrix =</span> <span class="fu">list</span>()){ <span class="co"># accepts lists</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  dist_list <span class="ot">=</span> <span class="fu">list</span>() <span class="co"># empty list to store new lists</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(list_matrix)){ <span class="co"># reiteration over the length of a list</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    k <span class="ot">=</span> i <span class="co"># initialisation of a matrix row</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    j <span class="ot">=</span> k <span class="sc">+</span> <span class="dv">1</span>  <span class="co"># initialisation of a matrix column, it needs to be + 1 compared to the row as otherwise we will get distance equal to 0 </span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># (there's no distance traveled from, e.g. frame 2 to frame 2)</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (j <span class="sc">&lt;=</span> <span class="fu">ncol</span>(list_matrix)){ <span class="co"># columns should not exceed the number of columns of a matrix (looping (out of bounds) error might be given otherwise)</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>      dist_list[[i]] <span class="ot">=</span> list_matrix[k,j] <span class="co"># for each `i` list extract matrix values at row k and column j </span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> {</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span> <span class="co"># break if j is above number of columns of a matrix</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dist_list)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co"># an empty list for distance vectors</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>distance_list <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="co"># loop over `distance_matrix_list` and apply a `dist_function()`</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="co"># system.time( # to measure how long it takes to run </span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(distance_matrix_list)){</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>  distance_list[[i]] <span class="ot">=</span> distance_matrix_list[[i]] <span class="sc">|&gt;</span> </span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dist_function</span>() <span class="sc">|&gt;</span> <span class="co"># apply the new function</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unlist</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.data.frame</span>() <span class="co"># create a dataframe (will be useful in later steps)</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(distance_list[[i]]) <span class="ot">=</span> <span class="st">"dist"</span> <span class="co"># rename a column</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: each list is shorter by 1 element compared to the original input list because of initialisation starting at 1, thus capturing the distance between frame 1 and 2. </span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="co"># In other words, the function omits the starting point at which an agent.</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="do">## testing</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="co"># here we'll check that the function works as it should.</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>distance_list[[<span class="dv">5</span>]][<span class="dv">1</span>] <span class="co"># agent 5's traveled distance from frame 1 to 2</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.1474067</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="co"># finding distance manually</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_distance</span>(agent_list[[<span class="dv">5</span>]][<span class="dv">1</span>,<span class="dv">3</span>], <span class="co"># frame 1 of agent 5</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>                agent_list[[<span class="dv">5</span>]][<span class="dv">2</span>,<span class="dv">3</span>]) <span class="co"># frame 2 of agent 5</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 0.1474067</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>distance_matrix_list[[<span class="dv">5</span>]][<span class="dv">2</span>,<span class="dv">1</span>] <span class="co"># second row in matrix 1 ([1,1] would return 0 as there's the distance from frame 1 to frame 1 equals to 0) of agent 5.</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.1474067</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="do">## it's time to join distance_list to agents_list</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: our lists are of unequal row lengths, hence we will have to do two intermediate steps</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="co"># first let's create a list to store joined lists</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>agent_dist_list <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="co"># a list to store values of a shorter (intermediate) list of dataframes</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>dist_list_new <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="co"># create a loop</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="co"># first we will create an intermediate list of dataframes</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(agent_list)){</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>  dist_list_new[[i]] <span class="ot">=</span> <span class="fu">rbind</span>(<span class="fu">data.frame</span>(<span class="st">"dist"</span> <span class="ot">=</span> <span class="dv">0</span>),</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>                             distance_list[[i]]) <span class="co"># adding a new row on top of the dataframes in the distance_list, </span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>  <span class="co"># so their length matches the length of DFs in the agent_list</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>  agent_dist_list[[i]] <span class="ot">=</span> <span class="fu">cbind</span>(agent_list[[i]],</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>                               dist_list_new[[i]]) <span class="co"># joining dataframes by column</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>agent_dist_list[[<span class="dv">1</span>]]</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="co"># looks good, we have 220 rows and the first one has a distance column equal to 0 (ie starting point)</span></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="co"># let's save agent_dist_list for future uses as .dat file</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(agent_dist_list,</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>     <span class="at">file =</span> <span class="st">"agent_dist_list.dat"</span>)</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(agent_dist_list,</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>     <span class="at">file =</span> <span class="st">"agent_dist_list.rds"</span>)</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="co"># let's save agent_dist_list for future uses as .dat file</span></span>
-<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(agent_dist_list,</span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>     <span class="at">file =</span> <span class="st">"agent_dist_list.dat"</span>)</span>
-<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(agent_dist_list,</span>
-<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>     <span class="at">file =</span> <span class="st">"agent_dist_list.rds"</span>)</span>
-<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>dist_list <span class="ot">=</span> <span class="fu">readRDS</span>(<span class="st">"agent_dist_list.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>dist_list <span class="ot">=</span> <span class="fu">readRDS</span>(<span class="st">"agent_dist_list.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lists into a single df</span></span>
