@@ -39,7 +39,7 @@
     "href": "intro.html",
     "title": "2  Getting data",
     "section": "",
-    "text": "# let's convert jps and gcs dataframes to sf objects, so we can perform spatial operations\n\ntraj1_sf = traj1 |> \n  sf::st_as_sf(coords = c(\"X\", \"Y\")) |> \n  dplyr::select(-c(3,4,5,6,7)) # drop columns we won't need\n\ngcs_sf = gcs |> \n  sf::st_as_sf(coords = c(\"x_coord\", \"y_coord\")) |> \n  dplyr::mutate(geometry = geometry/14) # convert from pixels to metres"
+    "text": "In this chapter I do not demonstrate the CGS data transformation from .dat to a .csv file. Yet, the script for it (including extensive documentation) can be found in the “read_frames.R” script.\nJPS produces .txt files that can be easily read into R. It did not require any pre-processing before reading it into R.\nAlso, both JPS and GCS datasets are transformed into sf objects to make spatial manipulation possible (and much easier!).\n\n# trajectory data\ntraj1 = read.table(\"/Users/gretatimaite/Desktop/pedestrian_simulation/final_results/8_frame/1/traj.txt\",\n                   col.names = c(\"ID\",  \"FR\",   \"X\",    \"Y\",    \"Z\",    \"A\",    \"B\",    \"ANGLE\",    \"COLOR\"))\n\ntraj1 |> dplyr::glimpse()\n\n# clean GCS data\n\ngcs = sf::read_sf(\"https://github.com/GretaTimaite/pedestrian_simulation/releases/download/data/frames_final.csv\")\n\n\n# let's convert jps and gcs dataframes to sf objects, so we can perform spatial operations\n\ntraj1_sf = traj1 |> \n  sf::st_as_sf(coords = c(\"X\", \"Y\")) |> \n  dplyr::select(-c(3,4,5,6,7)) # drop columns we won't need\n\ngcs_sf = gcs |> \n  sf::st_as_sf(coords = c(\"x_coord\", \"y_coord\")) |> \n  dplyr::mutate(geometry = geometry/14) # convert from pixels to metres"
   },
   {
     "objectID": "flow.html",

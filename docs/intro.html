@@ -152,7 +152,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Bibliography</span></a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Project Summary</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -228,6 +228,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
+<p>GCS data was cleaned by Patricia Ternes. It was downloaded from <a href="https://github.com/Urban-Analytics/dust/tree/main/Projects/ABM_DA/experiments/grand_central_terminal_data/GCT_final_real_data">here</a>. However, the data was not in a friendly format (multiple .dar files sorted by frame), thus I further manipulated and transformed the data into a .csv format. Final GCS data used throughout this project can be downloaded from the <a href="https://github.com/GretaTimaite/pedestrian_simulation/releases/download/data/frames_final.csv">releases</a>.</p>
+<p>In this chapter I do not demonstrate the CGS data transformation from .dat to a .csv file. Yet, the script for it (including extensive documentation) can be found in the <a href="https://github.com/GretaTimaite/pedestrian_simulation/blob/main/read_frames.R">“read_frames.R” script</a>.</p>
+<p>JPS produces .txt files that can be easily read into R. It did not require any pre-processing before reading it into R.</p>
+<p>Also, both JPS and GCS datasets are transformed into <code>sf</code> objects to make spatial manipulation possible (and much easier!).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># trajectory data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>traj1 <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"/Users/gretatimaite/Desktop/pedestrian_simulation/final_results/8_frame/1/traj.txt"</span>,</span>
@@ -336,7 +340,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./index.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Bibliography</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Project Summary</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

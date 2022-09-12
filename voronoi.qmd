@@ -1,8 +1,11 @@
 ---
 title: "Voronoi"
 ---
+Voronoi diagrams is a method to partition a 2D plane "into regions based on distance to particles in a specific set. Each region contains all the points closer to the related particle than to others." ([Xiao et al., 2016:568](https://www.sciencedirect.com/science/article/pii/S0968090X16300493#bb0190)) Voronoi diagram divides the space (e.g., train concourse) into cells with a pedestrian in each cell (see Xiao et al., 2016). Importantly, cells change every time a pedestrian moves.
 
-In this chapter we will plot voronoi densities and comapre them with "regular" densities of GCS and JPS.
+Voronoi diagrams should result in smoother plots compared to classical densities because it is possible to include those instances when part of an agent's cell intersects with a measured area even though the agent itself (e.g. the dot) might not be in the measured area (for more see Steffen and Seyfried, 2010).
+
+In this chapter we will plot voronoi densities and comapre them with classical densities of GCS and JPS.
 
 ```{r, eval = F}
 deldir_pol = readRDS("/Users/gretatimaite/Desktop/pedestrian_simulation/deldir_pol.RDS")
