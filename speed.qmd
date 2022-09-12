@@ -2,15 +2,19 @@
 title: "Speed"
 ---
 
+This chapter demonstrates **how to derive agent speed per frame** (which later can be aggregated into seconds, if needed) from either GCS or JPS data. 
+
+The idea is the following: measure the distance an agent travelled from frame 1 to frame 2. This will be indicative of how much an agent moved in one frame (0.04 sec)
+
+It **produces a new dataset** with a new "dist" column which is equivalent to agent's speed per frame. The output of this is used to plot fundamental diagrams (speed~density).
+
+Potential enchancements:
+
+1. write a function that allows to specify interval at which to estimate travelled distance. For example, it could be for every frame (ie from frame 1 to frame 2) or every 25 frames (ie from frame 1 to frame 25). The second would simplify the trajectory but not much detail should be lost.
+
 # GCS Speed
 
 ```{r, eval = F}
-# AIM: measure pedestrian speed
-# how: measure the distance an agent travelled from frame A to frame B, this will be indicative of how much an agent moved in one frame (0.04 sec)
-# later this can be aggregated as to estimate the distance travelled in, for instance, 1 second
-# enchancement: write a function that allows to specify interval at which to estimate travelled distance. For example, it could be for every frame
-# (ie from frame 1 to frame 2) or every 25 frames (ie from frame 1 to frame 25). The second would simplify the trajectory but not much detail should be lost 
-# as there's as much an agent can travel in one second. 
 
 # get data
 frames_sf = sf::st_read("https://github.com/GretaTimaite/pedestrian_simulation/releases/download/data/gcs_frames.geojson")
