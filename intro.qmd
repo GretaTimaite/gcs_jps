@@ -17,7 +17,7 @@ traj1 |> dplyr::glimpse()
 
 # clean GCS data
 
-gcs = sf::read_sf("https://github.com/GretaTimaite/pedestrian_simulation/releases/download/data/frames_final.csv")
+gcs = read.csv("https://github.com/GretaTimaite/pedestrian_simulation/releases/download/data/frames_final.csv")
 ```
 
 ```{r, eval = F}
