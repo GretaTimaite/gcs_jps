@@ -348,7 +348,7 @@ gridExtra::grid.arrange(fd_sel_comp[[1]], fd_sel_comp[[2]], layout_matrix = rbin
 
 ![](figures/fd_sel_comp.png)
 
-## Discussion
+# Discussion
 
 Fundamental diagrams do not show the expected negative slope -- the increase in density does not lead to a decreased speed. Indeed, a reverse pattern can be seen in all GCS plots. Arguably, this is a case because in all areas the density remains low enough not to reduce agent speed. An increase in average speed and density might be a result of a new agent entering the area that walks fast, thus boosting the av.speed and density (a little bit!).
 
