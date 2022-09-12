@@ -16,6 +16,10 @@ Area = an area in which agents are counted
 
 It should be noted that fundamental diagrams may be slightly influenced by different measurement methods (Zhang et al., 2011). However, the aim of this chapter is not to compare different methods but rather understand the extent to which simulated (JPS) data reflects real-life GCS data. Therefore, the focus in this chapter is on classical density and average speed.
 
+The feature of a fundamental diagram is that with "growing density, the velocity decreases monotonically" (Helbing, 2001: sec B, para 3). In other words, the agent speed decreases when an area becomes crowded.
+
+Thus, the hypothesis is that in both GCS and JPS models the agent speed decreases as the environment becomes more populated.
+
 Note 1: GCS has distance/speed per frame data. You can find out how it was acquired following this R script: https://github.com/GretaTimaite/pedestrian_simulation/blob/main/gcs_speed.R
 
 ## 1.1 Global (GCS)
@@ -343,5 +347,13 @@ gridExtra::grid.arrange(fd_sel_comp[[1]], fd_sel_comp[[2]], layout_matrix = rbin
 
 ![](figures/fd_sel_comp.png)
 
+## Discussion
 
+Fundamental diagrams do not show the expected negative slope -- the increase in density does not lead to a decreased speed. Indeed, a reverse pattern can be seen in all GCS plots. Arguably, this is a case because in all areas the density remains low enough not to reduce agent speed. An increase in average speed and density might be a result of a new agent entering the area that walks fast, thus boosting the av.speed and density (a little bit!).
+
+In case of JPS, we can observe a steady relationship between speed and density. Again, it is likely that the environment does not become crowded enough to force agents to stop and slow down. Moreover, in the JPS agent speed is set (i.e. is constant), thus reducing the variance of agent speeds. This, however, does not represent the actual pedestrian dynamics in the GCS in which pedestrians might randomly stop to check, for instance, their phones or speed up or slow down depending on their individual circumstances (e.g. how much time is left before train departure).
+
+Also, in this example I relied on classical density measure but there are other ways to measure it. For example, Duives et al. (2015) discuss 7 measures for quantifying pedestrian crowdedness in which Voronoi and X-T measures are considered "the best". It could be useful to explore different methods to confirm (or not) that the negative slope remains in GCS and the current JPS models.
+
+Finally, it could be interesting to experiment with different agent numbers in JPS to explore when/how congestion occurs, thus leading to the expected outcome -- as density increases, speed/velocity decreases.
 
