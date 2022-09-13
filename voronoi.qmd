@@ -15,6 +15,8 @@ gcs_d_div = readRDS("gcs_d_div.RDS")
 jps_deldir = readRDS("traj1_voronoi.RDS")
 
 jps_d_div = readRDS("jps_d_div.RDS")
+
+jps_d_sel = readRDS("jps_d_sel.RDS")
 ```
 
 # GCS
@@ -407,12 +409,68 @@ for (k in 1:length(jps_deldir)){
   #   k < length(deldir_pol) + 1){
       # gcs_deldir_z1[[k]] = sf::st_intersection(zone1_pol,  deldir_pol[[k]])
     jps_deldir_z1[[k]] = gcs_deldir_fun(gcs = zones_pol_sf[1,],
-                                     deldir_pol = deldir_pol[[k]]/14) #from pixels to metres
+                                     deldir_pol = jps_deldir[[k]]) #from pixels to metres
     jps_deldir_z2[[k]] = gcs_deldir_fun(gcs = zones_pol_sf[2,],
-                                     deldir_pol = deldir_pol[[k]] /14)
+                                     deldir_pol = jps_deldir[[k]])
   # }
   }
 ```
+
+```{r, eval = F}
+# plot zone 1
+jps_voronoi_density_temp_z1 = vector()
+jps_voronoi_density_z1 = data.frame()
+for (i in 1:length(jps_deldir_z1)){
+  if(is.null(jps_deldir_z1[[i]]) == FALSE){
+    jps_voronoi_density_temp_z1[i] = nrow(jps_deldir_z1[[i]]) / gcs_area_sel[1]
+    jps_voronoi_density_z1 = as.data.frame("x" = jps_voronoi_density_temp_z1) |> 
+      dplyr::mutate(frame = dplyr::row_number(),
+                    sec = frame / 25)
+    colnames(jps_voronoi_density_z1) = c("density", "frame", "sec")
+  }
+  }
+
+ggplot2::ggplot(jps_voronoi_density_z1)+
+  ggplot2::aes(x = sec,
+               y = density,
+               col = "black")+
+  ggplot2::geom_line() +
+  ggplot2::geom_line(data = jps_d_sel[[1]], color = "red")+
+  ggplot2::scale_colour_manual(
+                      values = c("Voronoi"="black", "Classical" = "red")) + 
+  ggplot2::labs(title="Classical vs Voronoi densities for Zone 1")+
+  ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+```
+
+![](figures/jps_cl_vor_z1.png)
+
+```{r, eval = F}
+# plot zone 2
+jps_voronoi_density_temp_z2 = vector()
+jps_voronoi_density_z2 = data.frame()
+for (i in 1:length(jps_deldir_z2)){
+  if(is.null(jps_deldir_z2[[i]]) == FALSE){
+    jps_voronoi_density_temp_z2[i] = nrow(jps_deldir_z2[[i]]) / gcs_area_sel[1]
+    jps_voronoi_density_z2 = as.data.frame("x" = jps_voronoi_density_temp_z2) |> 
+      dplyr::mutate(frame = dplyr::row_number(),
+                    sec = frame / 25)
+    colnames(jps_voronoi_density_z2) = c("density", "frame", "sec")
+  }
+  }
+
+ggplot2::ggplot(jps_voronoi_density_z2)+
+  ggplot2::aes(x = sec,
+               y = density,
+               col = "black")+
+  ggplot2::geom_line() +
+  ggplot2::geom_line(data = jps_d_sel[[2]], color = "red")+
+  ggplot2::scale_colour_manual(
+                      values = c("Voronoi"="black", "Classical" = "red")) + 
+  ggplot2::labs(title="Classical vs Voronoi densities for Zone 2")+
+  ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+```
+
+![](figures/jps_cl_vor_z2.png)
 
 
 # Discussion
