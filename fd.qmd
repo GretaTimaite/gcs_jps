@@ -356,7 +356,7 @@ In case of JPS, we can observe a steady relationship between speed and density. 
 
 What could be done next?
 
-1. In this example I relied on classical density measure but there are other ways to measure it. For example, [Duives et al. (2015)](https://www.sciencedirect.com/science/article/pii/S037843711200667X) discuss 7 measures for quantifying pedestrian crowdedness in which Voronoi and X-T measures are considered "the best". It could be useful to explore different methods to confirm (or not) that the negative slope remains in GCS and the current JPS models.
+1. In this example I relied on classical density measure but there are other ways to measure it. For example, [Duives et al. (2015)](https://www.sciencedirect.com/science/article/pii/S0378437114010164) discuss 7 measures for quantifying pedestrian crowdedness in which Voronoi and X-T measures are considered "the best". It could be useful to explore different methods to confirm (or not) that the negative slope remains in GCS and the current JPS models.
 2. Plot speed~voronoi density
 3. Aggregate frames into seconds (ie 25 frames for GCS and 8 frames for JPS)
 4. It could be interesting to experiment with different agent numbers in JPS to explore when/how congestion occurs, thus leading to the expected outcome -- as density increases, speed/velocity decreases.
