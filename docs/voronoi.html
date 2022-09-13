@@ -702,7 +702,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1 data-number="12"><span class="header-section-number">12</span> Discussion</h1>
 <p>As expected, in GCS Voronoi diagrams show higher density compared to “classical” density measure. One of the ideas behind Voronoi diagrams is that they “smooth” densities, however it’s not a case in any of them. Potentially this is because I plot them by frame (0.04 sec) instead of, e.g., second (25 frames).</p>
 <p>Also, it is interesting to observe how much densier an Zone 1 becomes when using Voronoi diagram to quantify density. While classical density measure shows that there periods of no agents in Zone 1 are common, these periods basicaly disappear when Voronoi diagram is applied. My suspicion is that because Zone 1 is close to the shopping windows, pedestrians walk by and/or stop there for a “window shopping” but do not always physically enter Zone 1 but their Voronoi cells do intersect.</p>
-<p>Interestingly, in the context of JPS, density in Zone 1 also increases much more significantly compared to Zone 2.</p>
+<p>Interestingly, in the context of JPS, density in Zone 1 also increases much more significantly compared to Zone 2. Zone 1 looks like experiencing similar changes as Zone 1 in GCS: periods where only 1 (or none) agent is present are gone; if classical density shows that agents disappear at approx 55th second, then Voronoi demonstrates agent movement until the end of simulation. Potential reason for this is that there are 5 agents that are not evacuated, thus at least one agent’s cells intersects with Zone 1 (indeed, the same could be applied to Zone 2).</p>
+<p>A thought re Voronoi diagrams for GCS: let’s say, there are 10 agents in the env at a given time. 8 of them are clustered on the right handside but 2 agents are on the left. Thus, these two agents will have their cells joined to those on the right (maybe not to each), hence increasing the density even though the agents (not their cells) might be far away from the measured area.</p>
+<p>What could be done next?:</p>
+<ol type="1">
+<li>Aggregating data into seconds rather than frames could help to overcome some of the “spiking” present in data.</li>
+<li>It could be useful to come up with an (arbitrary) number of agents that need to be present in the environment to avoid “catching” instances when a cell of an agent far from the measured area intersects. While this might be a good solution for simulated data, problematically, however, this might not be a good solution for GCS data which has a great number of frames with only several agents.</li>
+</ol>
+<p>Maybe for lower densities (how would one define “low density”?) classical density measure is enough?</p>
 
 
 </section>

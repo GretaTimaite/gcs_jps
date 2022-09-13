@@ -74,7 +74,7 @@
     "href": "flow.html#global-jps",
     "title": "4  Flow",
     "section": "4.4 1.2 Global (JPS)",
-    "text": "4.4 1.2 Global (JPS)\n\n# now let's create a new column for seconds\n# 1 second = 25 frames\njps_s = traj1_sf |> \n  dplyr::mutate(sec = FR / 25)\n\n# group df by seconds\njps_grouped = jps_s |> \n  sf::st_drop_geometry() |> #drop geometry as it's not needed here\n  dplyr::group_by(sec) |> # group by seconds\n  dplyr::summarise(n = dplyr::n()) # summarise \n\njps_grouped |> \n  head()\n\n\n4.4.1 Plotting\n\njps_flow_plot = ggplot2::ggplot(jps_grouped) +\n  ggplot2::aes(x = sec,\n               y = n) +\n  ggplot2::geom_line()\njps_flow_plot"
+    "text": "4.4 1.2 Global (JPS)\n\n# now let's create a new column for seconds\n# 1 second = 25 frames\njps_s = traj1_sf |> \n  dplyr::mutate(sec = FR / 8)\n\n# group df by seconds\njps_grouped = jps_s |> \n  sf::st_drop_geometry() |> #drop geometry as it's not needed here\n  dplyr::group_by(sec) |> # group by seconds\n  dplyr::summarise(n = dplyr::n()) # summarise \n\njps_grouped |> \n  head()\n\n\n4.4.1 Plotting\n\njps_flow_plot = ggplot2::ggplot(jps_grouped) +\n  ggplot2::aes(x = sec,\n               y = n) +\n  ggplot2::geom_line()\njps_flow_plot"
   },
   {
     "objectID": "flow.html#divided-flow-jps",
@@ -144,7 +144,7 @@
     "href": "density.html#global-jps",
     "title": "5  Density",
     "section": "5.4 2.1 Global (JPS)",
-    "text": "5.4 2.1 Global (JPS)\n\n# group by seconds and then measure density\njps_d = traj1_sf |> \n  sf::st_drop_geometry() |> \n  dplyr::mutate(sec = FR/8) |>  # 1 sec = 8 frames\n  dplyr::group_by(sec) |> \n  dplyr::summarise(n = dplyr::n(),\n                   sec = sec) |> \n  dplyr::mutate(\n    density = n / gcs_area\n  )\n\ngcs_d |> head()\n\n\n5.4.1 Plotting\n\njps_density = ggplot2::ggplot(jps_d)+\n  ggplot2::aes(x = sec,\n               y = density)+\n  ggplot2::geom_line()\n\nprint(jps_density)"
+    "text": "5.4 2.1 Global (JPS)\n\n# group by seconds and then measure density\njps_d = traj1_sf |> \n  sf::st_drop_geometry() |> \n  dplyr::mutate(sec = FR/8) |>  # 1 sec = 8 frames\n  dplyr::group_by(sec) |> \n  dplyr::summarise(n = dplyr::n(),\n                   sec = sec) |> \n  dplyr::mutate(\n    density = n / gcs_area\n  )\n\n\n5.4.1 Plotting\n\njps_density = ggplot2::ggplot(jps_d)+\n  ggplot2::aes(x = sec,\n               y = density)+\n  ggplot2::geom_line()\n\nprint(jps_density)"
   },
   {
     "objectID": "density.html#divided-jps",
