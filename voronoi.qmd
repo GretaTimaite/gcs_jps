@@ -13,8 +13,9 @@ deldir_pol = readRDS("/Users/gretatimaite/Desktop/pedestrian_simulation/deldir_p
 gcs_d_div = readRDS("gcs_d_div.RDS")
 ```
 
+# GCS
 
-# Divided
+## Divided
 
 ```{r, eval = F}
 # first let's "borrow" some density code from the previous chaper
@@ -289,4 +290,9 @@ ggplot2::ggplot(voronoi_density_z2)+
 
 ![](figures/gcs_cl_vor_z2.png)
 
+# Discussion
+
+As expected, in GCS Voronoi diagrams show higher density compared to "classical" density measure.  One of the ideas behind Voronoi diagrams is that they "smooth" densities, however it's not a case in any of them. Potentially this is because I plot them by frame (0.04 sec) instead of, e.g., second (25 frames).
+
+Also, it is interesting to observe how much densier an Zone 1 becomes when using Voronoi diagram to quantify density. While classical density measure shows that there periods of no agents in Zone 1 are common, these periods basicaly disappear when Voronoi diagram is applied. My suspicion is that because Zone 1 is close to the shopping windows, pedestrians walk by and/or stop there for a "window shopping" but do not always physically enter Zone 1 but their Voronoi cells do intersect. 
 
