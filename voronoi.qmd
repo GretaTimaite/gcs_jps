@@ -13,6 +13,8 @@ deldir_pol = readRDS("/Users/gretatimaite/Desktop/pedestrian_simulation/deldir_p
 gcs_d_div = readRDS("gcs_d_div.RDS")
 
 jps_deldir = readRDS("traj1_voronoi.RDS")
+
+jps_d_div = readRDS("jps_d_div.RDS")
 ```
 
 # GCS
@@ -337,7 +339,80 @@ ggplot2::ggplot(jps_voronoi_density2)+
 
 ```
 
+![](figures/jps_cl_vor_div2.png)
+```{r, eval = F}
+# plot 3
+jps_voronoi_density3_temp = vector()
+jps_voronoi_density3 = data.frame()
+for (i in 1:length(jps_deldir3)){
+  if(is.null(jps_deldir3[[i]]) == FALSE){
+    jps_voronoi_density3_temp[i] = nrow(jps_deldir3[[i]]) / gcs_area_div[3]
+    jps_voronoi_density3 = as.data.frame("x" = jps_voronoi_density3_temp) |> 
+      dplyr::mutate(frame = dplyr::row_number(),
+                    sec = frame / 25)
+    colnames(jps_voronoi_density3) = c("density", "frame", "sec")
+  }
+  }
 
+ggplot2::ggplot(jps_voronoi_density3)+
+  ggplot2::aes(x = sec,
+               y = density,
+               color = "black")+
+  ggplot2::geom_line() +
+  ggplot2::geom_line(data = jps_d_div[[3]], color = "red")+
+  ggplot2::scale_colour_manual(
+                      values = c("Voronoi"="black", "Classical" = "red")) + 
+  ggplot2::labs(title="Classical vs Voronoi densities for JPS polygon 3")+
+  ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+
+```
+
+![](figures/jps_cl_vor_div3.png)
+```{r, eval = F}
+# plot 4
+jps_voronoi_density4_temp = vector()
+jps_voronoi_density4 = data.frame()
+for (i in 1:length(jps_deldir4)){
+  if(is.null(jps_deldir4[[i]]) == FALSE){
+    jps_voronoi_density4_temp[i] = nrow(jps_deldir4[[i]]) / gcs_area_div[4]
+    jps_voronoi_density4 = as.data.frame("x" = jps_voronoi_density3_temp) |> 
+      dplyr::mutate(frame = dplyr::row_number(),
+                    sec = frame / 25)
+    colnames(jps_voronoi_density4) = c("density", "frame", "sec")
+  }
+  }
+
+ggplot2::ggplot(jps_voronoi_density4)+
+  ggplot2::aes(x = sec,
+               y = density,
+               color = "black")+
+  ggplot2::geom_line() +
+  ggplot2::geom_line(data = jps_d_div[[4]], color = "red")+
+  ggplot2::scale_colour_manual(
+                      values = c("Voronoi"="black", "Classical" = "red")) + 
+  ggplot2::labs(title="Classical vs Voronoi densities for JPS polygon 4")+
+  ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+
+```
+
+![](figures/jps_cl_vor_div4.png)
+
+## Selected
+
+```{r, eval = F}
+jps_deldir_z1 = list()
+jps_deldir_z2 = list()
+for (k in 1:length(jps_deldir)){
+  # if (k > 43 &
+  #   k < length(deldir_pol) + 1){
+      # gcs_deldir_z1[[k]] = sf::st_intersection(zone1_pol,  deldir_pol[[k]])
+    jps_deldir_z1[[k]] = gcs_deldir_fun(gcs = zones_pol_sf[1,],
+                                     deldir_pol = deldir_pol[[k]]/14) #from pixels to metres
+    jps_deldir_z2[[k]] = gcs_deldir_fun(gcs = zones_pol_sf[2,],
+                                     deldir_pol = deldir_pol[[k]] /14)
+  # }
+  }
+```
 
 
 # Discussion
