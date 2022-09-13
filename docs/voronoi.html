@@ -219,7 +219,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#divided-1" id="toc-divided-1" class="nav-link" data-scroll-target="#divided-1"> <span class="header-section-number">10.1</span> Divided</a></li>
   <li><a href="#selected-1" id="toc-selected-1" class="nav-link" data-scroll-target="#selected-1"> <span class="header-section-number">10.2</span> Selected</a></li>
   </ul></li>
-  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"> <span class="header-section-number">11</span> Discussion</a></li>
+  <li><a href="#comparison" id="toc-comparison" class="nav-link" data-scroll-target="#comparison"> <span class="header-section-number">11</span> Comparison</a>
+  <ul class="collapse">
+  <li><a href="#selected-2" id="toc-selected-2" class="nav-link" data-scroll-target="#selected-2"> <span class="header-section-number">11.1</span> Selected</a></li>
+  </ul></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"> <span class="header-section-number">12</span> Discussion</a></li>
   </ul>
 </nav>
     </div>
@@ -503,7 +507,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    jps_voronoi_density1_temp[i] <span class="ot">=</span> <span class="fu">nrow</span>(jps_deldir1[[i]]) <span class="sc">/</span> gcs_area_div[<span class="dv">1</span>]</span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    jps_voronoi_density1 <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="st">"x"</span> <span class="ot">=</span> jps_voronoi_density1_temp) <span class="sc">|&gt;</span> </span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">frame =</span> dplyr<span class="sc">::</span><span class="fu">row_number</span>(),</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sec =</span> frame <span class="sc">/</span> <span class="dv">25</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sec =</span> frame <span class="sc">/</span> <span class="dv">8</span>)</span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colnames</span>(jps_voronoi_density1) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"density"</span>, <span class="st">"frame"</span>, <span class="st">"sec"</span>)</span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  }</span>
@@ -667,10 +671,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="figures/jps_cl_vor_z2.png" class="img-fluid"></p>
 </section>
 </section>
-<section id="discussion" class="level1" data-number="11">
-<h1 data-number="11"><span class="header-section-number">11</span> Discussion</h1>
+<section id="comparison" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Comparison</h1>
+<section id="selected-2" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="selected-2"><span class="header-section-number">11.1</span> Selected</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(voronoi_density_z1)<span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> sec,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">y =</span> density,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">col =</span> <span class="st">"black"</span>)<span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(<span class="at">data =</span> gcs_d_sel[[<span class="dv">1</span>]], <span class="at">color =</span> <span class="st">"red"</span>)<span class="sc">+</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(jps_voronoi_density_z1)<span class="sc">+</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> sec,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">y =</span> density,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">col =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(<span class="at">data =</span> jps_d_sel[[<span class="dv">1</span>]], <span class="at">color =</span> <span class="st">"purple"</span>) <span class="sc">+</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">scale_colour_manual</span>(</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"GCS Voronoi"</span><span class="ot">=</span><span class="st">"black"</span>, </span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"GCS Classical"</span> <span class="ot">=</span> <span class="st">"red"</span>,</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"JPS Voronoi"</span> <span class="ot">=</span> <span class="st">"blue"</span>,</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"JPS Classical"</span> <span class="ot">=</span> <span class="st">"purple"</span>)) <span class="sc">+</span> </span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Classical vs Voronoi densities for GCS and JPS Zone 1"</span>)<span class="sc">+</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">theme</span>(<span class="at">plot.title =</span> ggplot2<span class="sc">::</span><span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="discussion" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> Discussion</h1>
 <p>As expected, in GCS Voronoi diagrams show higher density compared to “classical” density measure. One of the ideas behind Voronoi diagrams is that they “smooth” densities, however it’s not a case in any of them. Potentially this is because I plot them by frame (0.04 sec) instead of, e.g., second (25 frames).</p>
 <p>Also, it is interesting to observe how much densier an Zone 1 becomes when using Voronoi diagram to quantify density. While classical density measure shows that there periods of no agents in Zone 1 are common, these periods basicaly disappear when Voronoi diagram is applied. My suspicion is that because Zone 1 is close to the shopping windows, pedestrians walk by and/or stop there for a “window shopping” but do not always physically enter Zone 1 but their Voronoi cells do intersect.</p>
+<p>Interestingly, in the context of JPS, density in Zone 1 also increases much more significantly compared to Zone 2.</p>
 
 
 </section>
