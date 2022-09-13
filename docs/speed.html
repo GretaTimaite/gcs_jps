@@ -238,7 +238,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This chapter demonstrates <strong>how to derive agent speed per frame</strong> (which later can be aggregated into seconds, if needed) from either GCS or JPS data.</p>
 <p>The idea is the following: measure the distance an agent travelled from frame 1 to frame 2. This will be indicative of how much an agent moved in one frame (0.04 sec)</p>
 <p>It <strong>produces a new dataset</strong> with a new “dist” column which is equivalent to agent’s speed per frame. The output of this is used to plot fundamental diagrams (speed~density).</p>
-<p>Potential enchancements:</p>
+<p>Potential enhancements:</p>
 <ol type="1">
 <li>write a function that allows to specify interval at which to estimate travelled distance. For example, it could be for every frame (ie from frame 1 to frame 2) or every 25 frames (ie from frame 1 to frame 25). The second would simplify the trajectory but not much detail should be lost.</li>
 </ol>
