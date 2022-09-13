@@ -11,30 +11,13 @@ In this chapter we will plot Voronoi densities and compare them with classical d
 deldir_pol = readRDS("/Users/gretatimaite/Desktop/pedestrian_simulation/deldir_pol.RDS")
 
 gcs_d_div = readRDS("gcs_d_div.RDS")
+
+jps_deldir = readRDS("traj1_voronoi.RDS")
 ```
 
 # GCS
 
 ## Divided
-
-```{r, eval = F}
-# first let's "borrow" some density code from the previous chaper
-
-matrix_walls = matrix(c(0,0,0,50*14,53*14,50*14,53*14, 0,0,0),
-                      ncol = 2,
-                      byrow = TRUE)
-matrixlist_walls = list(matrix_walls)
-polygon_walls = sf::st_polygon(matrixlist_walls)
-
-# divide gcs polygon by creating a grid
-gcs_div = sf::st_make_grid(polygon_walls, 
-                           n = 2,
-                           what = "polygons")
-# convert gcs_div to an sf object
-gcs_div_sf = gcs_div |> 
-  sf::st_as_sf() |> 
-  dplyr::rename(geom = x)
-```
 
 ```{r, eval = F}
 # function 
@@ -45,7 +28,6 @@ gcs_deldir_fun = function(gcs = list(),
                       deldir_pol)
 }
 ```
-
 
 
 ```{r, eval = F}
@@ -68,22 +50,6 @@ gcs_deldir4 = list()
   }
 ```
 
-```{r, eval = F}
-# Now let's figure out how many tiles are in each polygon
-# number of tiles (rows) in each dataframe in gcs_deldir indicates the number of agents
-# this number will be divided by the estimates area of a polygon
-
-# find out the area size of each polygon
-gcs_area = list()
-for (i in 1:lengths(gcs_div_sf)){
-  gcs_area[[i]] = sf::st_area(gcs_div_sf[[i]] / 14) 
-  # print(gcs_area)
-}
-# make it a vector
-gcs_area = gcs_area |>
-  unlist() |>
-  as.vector()
-```
 
 ```{r, eval = F}
 # plot 1
@@ -91,7 +57,7 @@ voronoi_density1_temp = vector()
 voronoi_density1 = data.frame()
 for (i in 1:length(gcs_deldir1)){
   if(is.null(gcs_deldir1[[i]]) == FALSE){
-    voronoi_density1_temp[i] = nrow(gcs_deldir1[[i]]) / gcs_area[1]
+    voronoi_density1_temp[i] = nrow(gcs_deldir1[[i]]) / gcs_area_div[1]
     voronoi_density1 = as.data.frame("x" = voronoi_density1_temp) |> 
       dplyr::mutate(frame = dplyr::row_number(),
                     sec = frame / 25)
@@ -115,7 +81,7 @@ voronoi_density2_temp = vector()
 voronoi_density2 = data.frame()
 for (i in 1:length(gcs_deldir2)){
   if(is.null(gcs_deldir2[[i]]) == FALSE){
-    voronoi_density2_temp[i] = nrow(gcs_deldir2[[i]]) / gcs_area[2]
+    voronoi_density2_temp[i] = nrow(gcs_deldir2[[i]]) / gcs_area_div[2]
     voronoi_density2 = as.data.frame("x" = voronoi_density2_temp) |> 
       dplyr::mutate(frame = dplyr::row_number(),
                     sec = frame / 25)
@@ -140,7 +106,7 @@ voronoi_density3_temp = vector()
 voronoi_density3 = data.frame()
 for (i in 1:length(gcs_deldir3)){
   if(is.null(gcs_deldir3[[i]]) == FALSE){
-    voronoi_density3_temp[i] = nrow(gcs_deldir3[[i]]) / gcs_area[3]
+    voronoi_density3_temp[i] = nrow(gcs_deldir3[[i]]) / gcs_area_div[3]
     voronoi_density3 = as.data.frame("x" = voronoi_density3_temp) |> 
       dplyr::mutate(frame = dplyr::row_number(),
                     sec = frame / 25)
@@ -164,7 +130,7 @@ voronoi_density4_temp = vector()
 voronoi_density4 = data.frame()
 for (i in 1:length(gcs_deldir4)){
   if(is.null(gcs_deldir4[[i]]) == FALSE){
-    voronoi_density4_temp[i] = nrow(gcs_deldir4[[i]]) / gcs_area[4]
+    voronoi_density4_temp[i] = nrow(gcs_deldir4[[i]]) / gcs_area_div[4]
     voronoi_density4 = as.data.frame("x" = voronoi_density4_temp) |> 
       dplyr::mutate(frame = dplyr::row_number(),
                     sec = frame / 25)
@@ -289,6 +255,90 @@ ggplot2::ggplot(voronoi_density_z2)+
 ```
 
 ![](figures/gcs_cl_vor_z2.png)
+
+
+# JPS
+
+## Divided
+
+```{r, eval = F}
+jps_deldir1 = list()
+jps_deldir2 = list()
+jps_deldir3 = list()
+jps_deldir4 = list()
+  for (k in 1:length(jps_deldir)){
+    # if (k < length(jps_deldir) + 1){
+      jps_deldir1[[k]] = gcs_deldir_fun(gcs = gcs_div_sf[1,],
+                                       deldir_pol = jps_deldir[[k]])
+      jps_deldir2[[k]] = gcs_deldir_fun(gcs = gcs_div_sf[2,],
+                                       deldir_pol = jps_deldir[[k]])
+      jps_deldir3[[k]] = gcs_deldir_fun(gcs = gcs_div_sf[3,],
+                                       deldir_pol = jps_deldir[[k]])
+      jps_deldir4[[k]] = gcs_deldir_fun(gcs = gcs_div_sf[4,],
+                                       deldir_pol = jps_deldir[[k]])
+    # }
+  }
+```
+
+```{r, eval = F}
+# plot 1
+jps_voronoi_density1_temp = vector()
+jps_voronoi_density1 = data.frame()
+for (i in 1:length(jps_deldir1)){
+  if(is.null(jps_deldir1[[i]]) == FALSE){
+    jps_voronoi_density1_temp[i] = nrow(jps_deldir1[[i]]) / gcs_area_div[1]
+    jps_voronoi_density1 = as.data.frame("x" = jps_voronoi_density1_temp) |> 
+      dplyr::mutate(frame = dplyr::row_number(),
+                    sec = frame / 25)
+    colnames(jps_voronoi_density1) = c("density", "frame", "sec")
+  }
+  }
+
+ggplot2::ggplot(jps_voronoi_density1)+
+  ggplot2::aes(x = sec,
+               y = density,
+               color = "black")+
+  ggplot2::geom_line() +
+  ggplot2::geom_line(data = jps_d_div[[1]], color = "red")+
+  ggplot2::scale_colour_manual(
+                      values = c("Voronoi"="black", "Classical" = "red")) + 
+  ggplot2::labs(title="Classical vs Voronoi densities for JPS polygon 1")+
+  ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+
+```
+
+![](figures/jps_cl_vor_div1.png)
+
+
+```{r, eval = F}
+# plot 2
+jps_voronoi_density2_temp = vector()
+jps_voronoi_density2 = data.frame()
+for (i in 1:length(jps_deldir2)){
+  if(is.null(jps_deldir2[[i]]) == FALSE){
+    jps_voronoi_density2_temp[i] = nrow(jps_deldir2[[i]]) / gcs_area_div[2]
+    jps_voronoi_density2 = as.data.frame("x" = jps_voronoi_density2_temp) |> 
+      dplyr::mutate(frame = dplyr::row_number(),
+                    sec = frame / 25)
+    colnames(jps_voronoi_density2) = c("density", "frame", "sec")
+  }
+  }
+
+ggplot2::ggplot(jps_voronoi_density2)+
+  ggplot2::aes(x = sec,
+               y = density,
+               color = "black")+
+  ggplot2::geom_line() +
+  ggplot2::geom_line(data = jps_d_div[[2]], color = "red")+
+  ggplot2::scale_colour_manual(
+                      values = c("Voronoi"="black", "Classical" = "red")) + 
+  ggplot2::labs(title="Classical vs Voronoi densities for JPS polygon 2")+
+  ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+
+```
+
+
+
 
 # Discussion
 
