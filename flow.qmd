@@ -173,7 +173,7 @@ gridExtra::grid.arrange(gcs_flow_zones_plots[[1]], gcs_flow_zones_plots[[2]], la
 # now let's create a new column for seconds
 # 1 second = 25 frames
 jps_s = traj1_sf |> 
-  dplyr::mutate(sec = FR / 25)
+  dplyr::mutate(sec = FR / 8)
 
 # group df by seconds
 jps_grouped = jps_s |> 

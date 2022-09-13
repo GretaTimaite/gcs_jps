@@ -138,7 +138,6 @@ jps_d = traj1_sf |>
     density = n / gcs_area
   )
 
-gcs_d |> head()
 ```
 ### Plotting
 

@@ -293,7 +293,7 @@ for (i in 1:length(jps_deldir1)){
     jps_voronoi_density1_temp[i] = nrow(jps_deldir1[[i]]) / gcs_area_div[1]
     jps_voronoi_density1 = as.data.frame("x" = jps_voronoi_density1_temp) |> 
       dplyr::mutate(frame = dplyr::row_number(),
-                    sec = frame / 25)
+                    sec = frame / 8)
     colnames(jps_voronoi_density1) = c("density", "frame", "sec")
   }
   }
@@ -471,6 +471,32 @@ ggplot2::ggplot(jps_voronoi_density_z2)+
 ```
 
 ![](figures/jps_cl_vor_z2.png)
+
+# Comparison
+
+## Selected
+
+```{r, eval = F}
+ggplot2::ggplot(voronoi_density_z1)+
+  ggplot2::aes(x = sec,
+               y = density,
+               col = "black")+
+  ggplot2::geom_line() +
+  ggplot2::geom_line(data = gcs_d_sel[[1]], color = "red")+
+  ggplot2::ggplot(jps_voronoi_density_z1)+
+  ggplot2::aes(x = sec,
+               y = density,
+               col = "blue")+
+  ggplot2::geom_line() +
+  ggplot2::geom_line(data = jps_d_sel[[1]], color = "purple") +
+  ggplot2::scale_colour_manual(
+                      values = c("GCS Voronoi"="black", 
+                                 "GCS Classical" = "red",
+                                 "JPS Voronoi" = "blue",
+                                 "JPS Classical" = "purple")) + 
+  ggplot2::labs(title="Classical vs Voronoi densities for GCS and JPS Zone 1")+
+  ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+```
 
 
 # Discussion
