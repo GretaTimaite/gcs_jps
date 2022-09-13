@@ -18,7 +18,7 @@ It should be noted that fundamental diagrams may be slightly influenced by diffe
 
 The feature of a fundamental diagram is that with "growing density, the velocity decreases monotonically" (Helbing, 2001: sec B, para 3). In other words, the agent speed decreases when an area becomes crowded.
 
-Thus, the hypothesis is that in both GCS and JPS models the agent speed decreases as the environment becomes more populated.
+Thus, the traditional hypothesis would be that in both GCS and JPS models the agent speed decreases as the environment becomes more populated. However, given low densities in both environments (show in "Density" chapter) allows to hypothesize that pedestrians would not show a decrease in speed simply because the environment does not become dense enough.
 
 Note 1: GCS has distance/speed per frame data. You can find out how it was acquired following this R script: https://github.com/GretaTimaite/pedestrian_simulation/blob/main/gcs_speed.R
 
@@ -354,7 +354,10 @@ Fundamental diagrams do not show the expected negative slope -- the increase in 
 
 In case of JPS, we can observe a steady relationship between speed and density. Again, it is likely that the environment does not become crowded enough to force agents to stop and slow down. Moreover, in the JPS agent speed is set (i.e. is constant), thus reducing the variance of agent speeds. This, however, does not represent the actual pedestrian dynamics in the GCS in which pedestrians might randomly stop to check, for instance, their phones or speed up or slow down depending on their individual circumstances (e.g. how much time is left before train departure).
 
-Also, in this example I relied on classical density measure but there are other ways to measure it. For example, [Duives et al. (2015)](https://www.sciencedirect.com/science/article/pii/S037843711200667X) discuss 7 measures for quantifying pedestrian crowdedness in which Voronoi and X-T measures are considered "the best". It could be useful to explore different methods to confirm (or not) that the negative slope remains in GCS and the current JPS models.
+What could be done next?
 
-Finally, it could be interesting to experiment with different agent numbers in JPS to explore when/how congestion occurs, thus leading to the expected outcome -- as density increases, speed/velocity decreases.
+1. In this example I relied on classical density measure but there are other ways to measure it. For example, [Duives et al. (2015)](https://www.sciencedirect.com/science/article/pii/S037843711200667X) discuss 7 measures for quantifying pedestrian crowdedness in which Voronoi and X-T measures are considered "the best". It could be useful to explore different methods to confirm (or not) that the negative slope remains in GCS and the current JPS models.
+2. Plot speed~voronoi density
+3. Aggregate frames into seconds (ie 25 frames for GCS and 8 frames for JPS)
+4. It could be interesting to experiment with different agent numbers in JPS to explore when/how congestion occurs, thus leading to the expected outcome -- as density increases, speed/velocity decreases.
 
