@@ -23,18 +23,76 @@ jps_d_sel = readRDS("jps_d_sel.RDS")
 
 ## Divided
 
+First, let's create a function that will intersect a measured area with polygonised deldir tiles to find out which tiles **intersect** with the area of interest.
+
+Intersection means that if a tile at least touches the edge of an area, it is considered as *inside* an area.
+
+For example, in the illustration below you can see all the tiles of frame 1554 that intersect with polygon 1 (in yellow). By plotting polygon 2 (in green), one can see the extension of some of the tiles in Polygon 1 to Polygon 2. Thus, some tiles would be considered as both in Polygon 1 and Polygon 2.
+
+```{r}
+#| eval = F,
+#| echo = F
+
+gcs_env_m()
+gcs_div_sf |> plot(add = T)
+gcs_div_sf[1,] |> plot(add = T, col = "yellow")
+gcs_div_sf[2,] |> plot(add = T, col = "green")
+gcs_deldir1[[1554]] |> plot(add = T)
+gcs_deldir2[[1554]] |> plot(add = T)
+text(x = 15,
+    y = 15,
+   label = "polygon 1")
+text(x = 40,
+    y = 15,
+   label = "polygon 2")
+```
+
+![](figures/intersection1.png)
+
+Indeed, the same tile could intersect with all 4 polygons.
+
+```{r}
+#| eval = F,
+#| echo = F
+
+gcs_env_m()
+gcs_div_sf |> plot(add = T)
+gcs_div_sf[1,] |> plot(add = T, col = "yellow")
+gcs_div_sf[2,] |> plot(add = T, col = "green")
+gcs_div_sf[3,] |> plot(add = T, col = "red")
+gcs_div_sf[4,] |> plot(add = T, col = "pink")
+gcs_deldir1[[1554]] |> plot(add = T)
+gcs_deldir2[[1554]] |> plot(add = T)
+gcs_deldir3[[1554]] |> plot(add = T)
+gcs_deldir4[[1554]] |> plot(add = T)
+text(x = 15,
+    y = 15,
+   label = "polygon 1")
+text(x = 40,
+    y = 15,
+   label = "polygon 2")
+text(x = 15,
+       y = 40,
+       label = "polygon 3")
+text(x = 40,
+       y = 40,
+       label = "polygon 4")
+```
+
+![](figures/intersection2.png)
+
 ```{r, eval = F}
 # function 
 
-gcs_deldir_fun = function(gcs = list(),
-                          deldir_pol = list()){
-  sf::st_intersection(gcs,
+gcs_deldir_fun = function(gcs = list(), # requires polygons(s) derived from GCS environment
+                          deldir_pol = list()){ # requires deldir polygons
+  sf::st_intersection(gcs, # intersects both inputs
                       deldir_pol)
 }
 ```
 
-
 ```{r, eval = F}
+# let's reiterate over all the deldir tiles to find out which ones of them intersect with which polygon.
 gcs_deldir1 = list()
 gcs_deldir2 = list()
 gcs_deldir3 = list()
@@ -43,13 +101,13 @@ gcs_deldir4 = list()
     if (k > 43 &
         k < length(deldir_pol) + 1){
       gcs_deldir1[[k]] = gcs_deldir_fun(gcs = gcs_div_sf[1,],
-                                       deldir_pol = deldir_pol[[k]])
+                                       deldir_pol = deldir_pol[[k]] / 14 ) # to metres
       gcs_deldir2[[k]] = gcs_deldir_fun(gcs = gcs_div_sf[2,],
-                                       deldir_pol = deldir_pol[[k]])
+                                       deldir_pol = deldir_pol[[k]] / 14)
       gcs_deldir3[[k]] = gcs_deldir_fun(gcs = gcs_div_sf[3,],
-                                       deldir_pol = deldir_pol[[k]])
+                                       deldir_pol = deldir_pol[[k]] / 14)
       gcs_deldir4[[k]] = gcs_deldir_fun(gcs = gcs_div_sf[4,],
-                                       deldir_pol = deldir_pol[[k]])
+                                       deldir_pol = deldir_pol[[k]] / 14)
     }
   }
 ```

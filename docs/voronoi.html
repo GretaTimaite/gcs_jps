@@ -266,33 +266,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1 data-number="9"><span class="header-section-number">9</span> GCS</h1>
 <section id="divided" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="divided"><span class="header-section-number">9.1</span> Divided</h2>
+<p>First, let’s create a function that will intersect a measured area with polygonised deldir tiles to find out which tiles <strong>intersect</strong> with the area of interest.</p>
+<p>Intersection means that if a tile at least touches the edge of an area, it is considered as <em>inside</em> an area.</p>
+<p>For example, in the illustration below you can see all the tiles of frame 1554 that intersect with polygon 1 (in yellow). By plotting polygon 2 (in green), one can see the extension of some of the tiles in Polygon 1 to Polygon 2. Thus, some tiles would be considered as both in Polygon 1 and Polygon 2.</p>
+<div class="cell">
+
+</div>
+<p><img src="figures/intersection1.png" class="img-fluid"></p>
+<p>Indeed, the same tile could intersect with all 4 polygons.</p>
+<div class="cell">
+
+</div>
+<p><img src="figures/intersection2.png" class="img-fluid"></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function </span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>gcs_deldir_fun <span class="ot">=</span> <span class="cf">function</span>(<span class="at">gcs =</span> <span class="fu">list</span>(),</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">deldir_pol =</span> <span class="fu">list</span>()){</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_intersection</span>(gcs,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>gcs_deldir_fun <span class="ot">=</span> <span class="cf">function</span>(<span class="at">gcs =</span> <span class="fu">list</span>(), <span class="co"># requires polygons(s) derived from GCS environment</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">deldir_pol =</span> <span class="fu">list</span>()){ <span class="co"># requires deldir polygons</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_intersection</span>(gcs, <span class="co"># intersects both inputs</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                      deldir_pol)</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>gcs_deldir1 <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gcs_deldir2 <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gcs_deldir3 <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>gcs_deldir4 <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(deldir_pol)){</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (k <span class="sc">&gt;</span> <span class="dv">43</span> <span class="sc">&amp;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        k <span class="sc">&lt;</span> <span class="fu">length</span>(deldir_pol) <span class="sc">+</span> <span class="dv">1</span>){</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      gcs_deldir1[[k]] <span class="ot">=</span> <span class="fu">gcs_deldir_fun</span>(<span class="at">gcs =</span> gcs_div_sf[<span class="dv">1</span>,],</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">deldir_pol =</span> deldir_pol[[k]])</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>      gcs_deldir2[[k]] <span class="ot">=</span> <span class="fu">gcs_deldir_fun</span>(<span class="at">gcs =</span> gcs_div_sf[<span class="dv">2</span>,],</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">deldir_pol =</span> deldir_pol[[k]])</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      gcs_deldir3[[k]] <span class="ot">=</span> <span class="fu">gcs_deldir_fun</span>(<span class="at">gcs =</span> gcs_div_sf[<span class="dv">3</span>,],</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">deldir_pol =</span> deldir_pol[[k]])</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>      gcs_deldir4[[k]] <span class="ot">=</span> <span class="fu">gcs_deldir_fun</span>(<span class="at">gcs =</span> gcs_div_sf[<span class="dv">4</span>,],</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">deldir_pol =</span> deldir_pol[[k]])</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let's reiterate over all the deldir tiles to find out which ones of them intersect with which polygon.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gcs_deldir1 <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gcs_deldir2 <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>gcs_deldir3 <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>gcs_deldir4 <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(deldir_pol)){</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (k <span class="sc">&gt;</span> <span class="dv">43</span> <span class="sc">&amp;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        k <span class="sc">&lt;</span> <span class="fu">length</span>(deldir_pol) <span class="sc">+</span> <span class="dv">1</span>){</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      gcs_deldir1[[k]] <span class="ot">=</span> <span class="fu">gcs_deldir_fun</span>(<span class="at">gcs =</span> gcs_div_sf[<span class="dv">1</span>,],</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">deldir_pol =</span> deldir_pol[[k]] <span class="sc">/</span> <span class="dv">14</span> ) <span class="co"># to metres</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>      gcs_deldir2[[k]] <span class="ot">=</span> <span class="fu">gcs_deldir_fun</span>(<span class="at">gcs =</span> gcs_div_sf[<span class="dv">2</span>,],</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">deldir_pol =</span> deldir_pol[[k]] <span class="sc">/</span> <span class="dv">14</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      gcs_deldir3[[k]] <span class="ot">=</span> <span class="fu">gcs_deldir_fun</span>(<span class="at">gcs =</span> gcs_div_sf[<span class="dv">3</span>,],</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">deldir_pol =</span> deldir_pol[[k]] <span class="sc">/</span> <span class="dv">14</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>      gcs_deldir4[[k]] <span class="ot">=</span> <span class="fu">gcs_deldir_fun</span>(<span class="at">gcs =</span> gcs_div_sf[<span class="dv">4</span>,],</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">deldir_pol =</span> deldir_pol[[k]] <span class="sc">/</span> <span class="dv">14</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot 1</span></span>
