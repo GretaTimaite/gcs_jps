@@ -10,7 +10,7 @@ Also, both JPS and GCS datasets are transformed into `sf` objects to make spatia
 
 ```{r, eval = F}
 # trajectory data
-traj1 = read.table("/Users/gretatimaite/Desktop/pedestrian_simulation/final_results/8_frame/1/traj.txt",
+traj1 = read.table("https://github.com/GretaTimaite/pedestrian_simulation/releases/download/data/traj.txt",
                    col.names = c("ID",	"FR",	"X",	"Y",	"Z",	"A",	"B",	"ANGLE",	"COLOR"))
 
 traj1 |> dplyr::glimpse()
