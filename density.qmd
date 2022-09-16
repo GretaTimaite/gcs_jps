@@ -130,7 +130,7 @@ gridExtra::grid.arrange(gcs_den_sel_plots[[1]], gcs_den_sel_plots[[2]], layout_m
 # group by seconds and then measure density
 jps_d = traj1_sf |> 
   sf::st_drop_geometry() |> 
-  dplyr::mutate(sec = FR/8) |>  # 1 sec = 8 frames
+  dplyr::mutate(sec = FR/25) |>  # 1 sec = 25 frames
   dplyr::group_by(sec) |> 
   dplyr::summarise(n = dplyr::n(),
                    sec = sec) |> 
@@ -190,7 +190,6 @@ gridExtra::grid.arrange(jps_den_div_plots[[1]], jps_den_div_plots[[2]], jps_den_
 jps_den_sel = list()
 for (i in 1:length(jps_joined_zones)){
   jps_den_sel[[i]] = jps_joined_grouped_zones[[i]] |> dplyr::mutate(area = gcs_area_sel[i])
-}
 ```
 
 ```{r, eval = F}
