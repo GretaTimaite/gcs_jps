@@ -264,7 +264,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>Density measure is similar to flow, but instead of countin the number of agents passing through, for instance, gates, persons per area are measured. Thus, its function is:</p>
+<p>Density measure is similar to flow, but instead of counting the number of agents passing through, for instance, gates, persons per area are measured. Thus, its function is:</p>
 <p>Density = N / m2</p>
 <p>N = number of agents</p>
 <p>Steffen and Seyfried (2010) identify two issues with this density measure:</p>
@@ -383,7 +383,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># group by seconds and then measure density</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>jps_d <span class="ot">=</span> traj1_sf <span class="sc">|&gt;</span> </span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">sec =</span> FR<span class="sc">/</span><span class="dv">8</span>) <span class="sc">|&gt;</span>  <span class="co"># 1 sec = 8 frames</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">sec =</span> FR<span class="sc">/</span><span class="dv">25</span>) <span class="sc">|&gt;</span>  <span class="co"># 1 sec = 25 frames</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(sec) <span class="sc">|&gt;</span> </span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">n =</span> dplyr<span class="sc">::</span><span class="fu">n</span>(),</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sec =</span> sec) <span class="sc">|&gt;</span> </span>

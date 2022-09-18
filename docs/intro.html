@@ -234,7 +234,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Also, both JPS and GCS datasets are transformed into <code>sf</code> objects to make spatial manipulation possible (and much easier!).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># trajectory data</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>traj1 <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"/Users/gretatimaite/Desktop/pedestrian_simulation/final_results/8_frame/1/traj.txt"</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>traj1 <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"https://github.com/GretaTimaite/pedestrian_simulation/releases/download/data/traj.txt"</span>,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"ID"</span>,  <span class="st">"FR"</span>,   <span class="st">"X"</span>,    <span class="st">"Y"</span>,    <span class="st">"Z"</span>,    <span class="st">"A"</span>,    <span class="st">"B"</span>,    <span class="st">"ANGLE"</span>,    <span class="st">"COLOR"</span>))</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>traj1 <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">glimpse</span>()</span>
