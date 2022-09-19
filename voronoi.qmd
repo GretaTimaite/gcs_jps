@@ -208,6 +208,40 @@ ggplot2::ggplot(voronoi_density4)+
 
 
 ![](figures/gcs_vor_div4.png)
+```{r}
+#| eval = F
+# measure mean for Classical density
+
+gcs_div_mean_temp = vector()
+gcs_div_mean = vector()
+for (i in 1:length(gcs_d_div)){
+  gcs_div_mean_temp[i] = gcs_d_div[[i]] |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean()
+  gcs_div_mean = gcs_div_mean_temp |>
+    as.matrix() |> 
+    t()
+}
+
+colnames(gcs_div_mean) = c("Polygon 1", "Polygon 2", "Polygon 3", "Polygon 4")
+rownames(gcs_div_mean) = "GCS Classical"
+```
+
+```{r}
+#| eval = F
+# measure mean for Voronoi density
+gcs_voronoi_div_mean = cbind(voronoi_density1 |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean(na.rm = T),
+voronoi_density2 |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean(na.rm = T),
+voronoi_density3 |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean(na.rm = T),
+voronoi_density4 |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean(na.rm = T))
+colnames(gcs_voronoi_div_mean) = c("Polygon 1", "Polygon 2", "Polygon 3", "Polygon 4")
+rownames(gcs_voronoi_div_mean) = "GCS Voronoi"
+```
+
+```{r}
+#| eval = F
+# join both GCS densities for polygons
+
+gcs_voronoi_div_joined = rbind(gcs_div_mean, gcs_voronoi_div_mean)
+```
 
 ## Selected
 
@@ -319,6 +353,66 @@ gcs_z2_plot = ggplot2::ggplot(voronoi_density_z2)+
 ```
 
 ![](figures/gcs_cl_vor_z2.png)
+
+
+```{r}
+#| eval = F
+# measure mean Classical density
+
+gcs_sel_mean_temp = vector()
+gcs_sel_mean = vector()
+for (i in 1:length(gcs_d_sel)){
+  gcs_sel_mean_temp[i] = gcs_d_sel[[i]] |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean()
+  gcs_sel_mean = gcs_sel_mean_temp |>
+    as.matrix() |>
+    t()
+}
+colnames(gcs_sel_mean) = c("Zone 1", "Zone 2")
+rownames(gcs_sel_mean) = "GCS Classical"
+
+```
+
+
+```{r}
+#| eval = F
+# measure mean Voronoi density
+gcs_voronoi_sel_mean = cbind(voronoi_density_z1 |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean(na.rm = T),
+voronoi_density_z2 |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean(na.rm = T))
+colnames(gcs_voronoi_sel_mean) = c("Zone 1", "Zone 2")
+rownames(gcs_voronoi_sel_mean) = "GCS Voronoi"
+```
+
+```{r}
+#| eval = F
+# join GCS densities for zones
+
+gcs_voronoi_sel_joined = rbind(gcs_sel_mean, gcs_voronoi_sel_mean)
+```
+
+```{r}
+#| eval = F
+# function to calculate how much voronoi density is higher than classical 
+
+diff_function = function(data = data.frame()){
+  output = data[,2] / data[,1]
+  return(output)
+}
+
+# testing function
+identical(diff_function(gcs_div_mean_joined[1,]),
+                        (gcs_div_mean_joined[1,2] / gcs_div_mean_joined[1,1]))
+
+# apply function 
+
+gcs_div_mean_joined = rbind(gcs_div_mean, gcs_voronoi_div_mean) |> 
+  t() |>
+  as.data.frame() 
+
+gcs_div_mean_joined = gcs_div_mean_joined |> 
+  dplyr::mutate(Difference = diff_function(gcs_div_mean_joined[,]))
+
+```
+
 
 
 # JPS
@@ -459,6 +553,41 @@ ggplot2::ggplot(jps_voronoi_density4)+
 
 ![](figures/jps_cl_vor_div4.png)
 
+```{r}
+#| eval = F
+# measure mean for classical density
+
+jps_div_mean_temp = vector()
+jps_div_mean = vector()
+for (i in 1:length(jps_d_div)){
+  jps_div_mean_temp[i] = jps_d_div[[i]] |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean()
+  jps_div_mean = jps_div_mean_temp |>
+    as.matrix() |> 
+    t()
+}
+
+colnames(jps_div_mean) = c("Polygon 1", "Polygon 2", "Polygon 3", "Polygon 4")
+rownames(jps_div_mean) = "JPS Classical"
+```
+
+```{r}
+#| eval = F
+# measure mean for Voronoi density
+jps_voronoi_div_mean = cbind(jps_voronoi_density1 |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean(na.rm = T),
+jps_voronoi_density2 |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean(na.rm = T),
+jps_voronoi_density3 |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean(na.rm = T),
+jps_voronoi_density4 |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean(na.rm = T))
+colnames(jps_voronoi_div_mean) = c("Polygon 1", "Polygon 2", "Polygon 3", "Polygon 4")
+rownames(jps_voronoi_div_mean) = "JPS Voronoi"
+```
+
+```{r}
+#| eval = F
+# join both JPS densities for polygons
+
+jps_voronoi_div_joined = rbind(jps_div_mean, jps_voronoi_div_mean)
+```
+
 ## Selected
 
 ```{r, eval = F}
@@ -536,11 +665,45 @@ jps_z2_plot = ggplot2::ggplot(jps_voronoi_density_z2)+
 
 ![](figures/jps_cl_vor_z2.png)
 
+```{r}
+#| eval = F
+# measure mean for Classical density
+
+jps_sel_mean_temp = vector()
+jps_sel_mean = vector()
+for (i in 1:length(gcs_d_sel)){
+  jps_sel_mean_temp[i] = jps_d_sel[[i]] |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean()
+  jps_sel_mean = jps_sel_mean_temp |>
+    as.matrix() |>
+    t()
+}
+colnames(jps_sel_mean) = c("Zone 1", "Zone 2")
+rownames(jps_sel_mean) = "JPS Classical"
+```
+
+
+```{r}
+#| eval = F
+# measure mean for Voronoi density
+jps_voronoi_sel_mean = cbind(jps_voronoi_density_z1 |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean(na.rm = T),
+jps_voronoi_density_z2 |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean(na.rm = T))
+colnames(jps_voronoi_sel_mean) = c("Zone 1", "Zone 2")
+rownames(jps_voronoi_sel_mean) = "JPS Voronoi"
+```
+
+```{r}
+#| eval = F
+# join JPS densities for zones
+
+jps_voronoi_sel_joined = rbind(jps_sel_mean, jps_voronoi_sel_mean)
+```
+
+
 # Comparison
 
 ## Selected
 
-```{r}
+```{r, eval=F}
 # gridExtra::grid.arrange(gcs_z1_plot, jps_z1_plot, layout_matrix = rbind(c(2,1)))
 library(patchwork)
 
@@ -552,6 +715,59 @@ readRDS("voronoi_z1_compare_plots.RDS")
 ```
 
 ![](figures/voronoi_z_comp.png)
+
+
+Now let's quantify the difference between Classical and Voronoi densities for both JPS and GCS. We will do this by dividing Voronoi density by Classical Density.
+
+```{r}
+#| eval = F
+
+all_mean_joined_temp = rbind(jps_voronoi_div_joined, gcs_voronoi_div_joined) |> t() |> as.data.frame()
+zones_joined = rbind(jps_voronoi_sel_joined, gcs_voronoi_sel_joined) |> t()
+
+all_mean_joined = rbind(all_mean_joined_temp, zones_joined) 
+```
+
+```{r}
+#| eval = F
+
+# apply difference function fpr JPS
+jps_cols = all_mean_joined[,1:2]
+all_mean_joined_diff_jps = jps_cols |> 
+  dplyr::mutate("JPS difference" = diff_function(jps_cols[,]))
+
+# for GCS
+gcs_cols = all_mean_joined[,3:4]
+all_mean_joined_diff_gcs = gcs_cols |> 
+  dplyr::mutate("GCS difference" = diff_function(gcs_cols[,]))
+
+# join all 
+all_mean_joined_diff = cbind(all_mean_joined_diff_jps, all_mean_joined_diff_gcs) |> 
+  round(3) |> 
+  as.data.frame() 
+kableExtra::kbl(all_mean_joined_diff) |>
+  kableExtra::kable_minimal(full_width = F)
+
+all_mean_joined_diff |> rownames()
+```
+
+```{r}
+all_mean_joined_diff |>
+  dplyr::mutate(rowname = all_mean_joined_diff |> rownames()) |> 
+  gt::gt(rowname_col = "rowname") |> 
+  # gt::cells_body(rows = everything()) |> 
+  gt::tab_spanner(label = "JuPedSim",
+                  columns = 1:3) |> 
+  gt::tab_spanner(label = "Grand Central Station",
+                  columns = 4:6) |> 
+  gt::data_color(columns = c("JPS difference", "GCS difference"),
+                 color = "gray") |> 
+  gt::tab_footnote(footnote = "Difference indicates how much Voronoi density is higher compared to the Classical density (i.e. difference = Voronoi density / Classical density)",
+                   placement = "left") 
+```
+
+![](figures/densities_quant.png)
+
 
 # Discussion
 
