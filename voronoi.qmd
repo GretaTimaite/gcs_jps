@@ -752,6 +752,7 @@ all_mean_joined_diff |> rownames()
 ```
 
 ```{r}
+#| eval = F
 all_mean_joined_diff |>
   dplyr::mutate(rowname = all_mean_joined_diff |> rownames()) |> 
   gt::gt(rowname_col = "rowname") |> 
