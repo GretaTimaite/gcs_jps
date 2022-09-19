@@ -671,7 +671,7 @@ jps_z2_plot = ggplot2::ggplot(jps_voronoi_density_z2)+
 
 jps_sel_mean_temp = vector()
 jps_sel_mean = vector()
-for (i in 1:length(gcs_d_sel)){
+for (i in 1:length(jps_d_sel)){
   jps_sel_mean_temp[i] = jps_d_sel[[i]] |> dplyr::group_by(sec) |> dplyr::pull(density) |> mean()
   jps_sel_mean = jps_sel_mean_temp |>
     as.matrix() |>
@@ -734,21 +734,17 @@ all_mean_joined = rbind(all_mean_joined_temp, zones_joined)
 # apply difference function fpr JPS
 jps_cols = all_mean_joined[,1:2]
 all_mean_joined_diff_jps = jps_cols |> 
-  dplyr::mutate("JPS difference" = diff_function(jps_cols[,]))
+  dplyr::mutate("JPS Difference" = diff_function(jps_cols[,]))
 
 # for GCS
 gcs_cols = all_mean_joined[,3:4]
 all_mean_joined_diff_gcs = gcs_cols |> 
-  dplyr::mutate("GCS difference" = diff_function(gcs_cols[,]))
+  dplyr::mutate("GCS Difference" = diff_function(gcs_cols[,]))
 
 # join all 
 all_mean_joined_diff = cbind(all_mean_joined_diff_jps, all_mean_joined_diff_gcs) |> 
   round(3) |> 
-  as.data.frame() 
-kableExtra::kbl(all_mean_joined_diff) |>
-  kableExtra::kable_minimal(full_width = F)
-
-all_mean_joined_diff |> rownames()
+  as.data.frame()
 ```
 
 ```{r}
@@ -761,14 +757,15 @@ all_mean_joined_diff |>
                   columns = 1:3) |> 
   gt::tab_spanner(label = "Grand Central Station",
                   columns = 4:6) |> 
-  gt::data_color(columns = c("JPS difference", "GCS difference"),
+  gt::data_color(columns = c("JPS Difference", "GCS Difference"),
                  color = "gray") |> 
-  gt::tab_footnote(footnote = "Difference indicates how much Voronoi density is higher compared to the Classical density (i.e. difference = Voronoi density / Classical density)",
+  gt::tab_footnote(footnote = "Note 1: Difference indicates how much Voronoi density is higher compared to the Classical density (i.e. difference = Voronoi density / Classical density).",
+                   placement = "left") |> 
+  gt::tab_footnote(footnote = "Note 2: Numbers are rounded to 3 decimal places.",
                    placement = "left") 
 ```
 
 ![](figures/densities_quant.png)
-
 
 # Discussion
 
